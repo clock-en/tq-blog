@@ -37,16 +37,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>会員登録</h1>
     <form method="POST" novalidate>
       <div>
-        <input name="name" placeholder="ユーザー名" maxlength="255">
+        <input name="name" placeholder="ユーザー名" maxlength="255"<?php if (
+            !empty($values['name'])
+        ) {
+            echo ' value="' . $values['name'] . '"';
+        } ?>>
+<?php if (!empty($errors['name'])): ?>
+        <div class="error"><?php echo $errors['name']; ?>
+<?php endif; ?>
       </div>
       <div>
-        <input name="email" placeholder="メールアドレス" maxlength="255">
+        <input name="email" placeholder="メールアドレス" maxlength="255"<?php if (
+            !empty($values['email'])
+        ) {
+            echo ' value="' . $values['email'] . '"';
+        } ?>>
+<?php if (!empty($errors['email'])): ?>
+        <div class="error"><?php echo $errors['email']; ?>
+<?php endif; ?>
       </div>
       <div>
-        <input type="password" name="password" placeholder="Password" maxlength="20">
+        <input type="password" name="password" placeholder="Password" maxlength="20"<?php if (
+            !empty($values['password'])
+        ) {
+            echo ' value="' . $values['password'] . '"';
+        } ?>>
+<?php if (!empty($errors['password'])): ?>
+        <div class="error"><?php echo $errors['password']; ?>
+<?php endif; ?>
       </div>
       <div>
-        <input type="password" name="password_confirm" placeholder="Password確認" maxlength="20">
+        <input type="password" name="password_confirm" placeholder="Password確認" maxlength="20"<?php if (
+            !empty($values['password_confirm'])
+        ) {
+            echo ' value="' . $values['password_confirm'] . '"';
+        } ?>>
+<?php if (!empty($errors['password_confirm'])): ?>
+        <div class="error"><?php echo $errors['password_confirm']; ?>
+<?php endif; ?>
       </div>
       <button type="submit">送信</button>
     </form>
