@@ -15,7 +15,7 @@ class DBManager
                 PDO::ERRMODE_EXCEPTION
             );
         } catch (PDOException $e) {
-            echo 'Fatal Error: Connection failed. ' . $e->getMessage();
+            echo 'Fatal Error: Connection failed.';
             die();
         }
     }

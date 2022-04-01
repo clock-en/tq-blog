@@ -39,6 +39,7 @@ function insertUser($values)
         throw new PDOException('予期せぬ不具合が発生しました。');
     }
     header('Location: ./signin.php');
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_array($errors) && empty($errors)) {
         try {
             if (!isUniqueEmail($values['email'])) {
-                $errors['email'] = '入力したパスワードは既に入力済みです。';
+                $errors['email'] = '入力したメールアドレスは既に入力済みです。';
             } else {
                 insertUser($values);
             }
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>会員登録</h1>
     <form method="POST" novalidate>
 <?php if (!empty($errors['system'])): ?>
-        <div class="error"><?php echo $errors['system']; ?>
+      <div class="error"><?php echo $errors['system']; ?>
 <?php endif; ?>
       <div>
         <input name="name" placeholder="ユーザー名" maxlength="255"<?php if (
