@@ -4,7 +4,7 @@ class Utils
     static function array_sanitize(array $array)
     {
         $output = [];
-        foreach ($_POST as $k => $v) {
+        foreach ($array as $k => $v) {
             $output[$k] = htmlspecialchars(trim($v), ENT_QUOTES);
         }
         return $output;
