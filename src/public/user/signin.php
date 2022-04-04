@@ -1,64 +1,40 @@
 <?php
-require_once '../modules/Utils.php';
-require_once '../modules/DBManager.php';
-
+require_once '../../app/Libs/Utils.php';
+require_once '../../app/Libs/UserDB.php';
+require_once '../../app/Libs/Validator.php';
 $errors = [];
-$values = [];
-
-function fetchUser(string $email, string $password)
-{
-    $db = new DBManager();
-    $sql = 'SELECT * FROM users WHERE email=:email AND password=:password';
-    $stmt = $db->connection->prepare($sql);
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':password', hash('sha256', $password), PDO::PARAM_STR);
-    $res = $stmt->execute();
-    if (!$res) {
-        throw new PDOException('予期せぬ不具合が発生しました。');
-    }
-    $user = $stmt->fetch();
-    return $user;
-}
+$email = '';
+$password = '';
 
 session_start();
 
 if (isset($_SESSION['login'])) {
     session_regenerate_id(true);
-    header('Location: ../index.php');
-    exit();
+    Utils::redirect('../index.php');
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $values = Utils::array_sanitize($_POST);
-    if ($values['email'] === '') {
+    $email = Utils::sanitize(filter_input(INPUT_POST, 'email') ?? '');
+    $password = Utils::sanitize(filter_input(INPUT_POST, 'password') ?? '');
+    if (!Validator::isNotBlank($email)) {
         $errors['email'] = 'メールアドレスを入力してください。';
     }
-    if ($values['password'] === '') {
+    if (!Validator::isNotBlank($password)) {
         $errors['password'] = 'パスワードを入力してください。';
     }
-    if (is_array($errors) && empty($errors)) {
-        try {
-            $user = fetchUser($values['email'], $values['password']);
-            if (empty($user)) {
-                $errors['system'] =
-                    'メールアドレスまたはパスワードが違います。';
-            } else {
-                session_regenerate_id(true);
-                $_SESSION['login'] = [
-                    'name' => $user['name'],
-                    'email' => $user['email'],
-                ];
-                header('Location: ../index.php');
-                exit();
-            }
-        } catch (PDOException $e) {
-            echo 'Fatal Error: ' . $e->getMessage();
-            die();
+    if (empty($errors)) {
+        $user = UserDB::findByMailWithPassword($email, $password);
+        if (!is_null($user)) {
+            session_regenerate_id(true);
+            $_SESSION['login'] = [
+                'name' => $user['name'],
+                'email' => $user['email'],
+            ];
+            Utils::redirect('../index.php');
         }
+        $errors['system'] = 'メールアドレスまたはパスワードが違います。';
     }
 }
-
-// TODO: 登録後の戻るや更新を行った際にPOSTされてしまうのを防ぎたい
 ?><!doctype html>
 <html>
 <head>
@@ -76,21 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="error"><?php echo $errors['system']; ?>
 <?php endif; ?>
     <div>
-        <input name="email" placeholder="メールアドレス" maxlength="255"<?php if (
-            !empty($values['email'])
-        ) {
-            echo ' value="' . $values['email'] . '"';
-        } ?>>
+      <input name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
 <?php if (!empty($errors['email'])): ?>
         <div class="error"><?php echo $errors['email']; ?>
 <?php endif; ?>
       </div>
       <div>
-        <input type="password" name="password" placeholder="Password" maxlength="20"<?php if (
-            !empty($values['password'])
-        ) {
-            echo ' value="' . $values['password'] . '"';
-        } ?>>
+        <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
 <?php if (!empty($errors['password'])): ?>
         <div class="error"><?php echo $errors['password']; ?>
 <?php endif; ?>
