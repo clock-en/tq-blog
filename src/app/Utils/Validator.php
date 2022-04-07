@@ -5,6 +5,8 @@ class Validator
 {
     /**
      * サニタイズ処理
+     * @param string $value
+     * @return string
      */
     static function sanitize(string $value): string
     {
@@ -13,6 +15,8 @@ class Validator
 
     /**
      * 未入力チェック
+     * @param string $value
+     * @return bool
      */
     static function isNotBlank(string $value): bool
     {
@@ -24,6 +28,9 @@ class Validator
 
     /**
      * 値比較チェック
+     * @param string $value1
+     * @param string $value2
+     * @return bool
      */
     static function isMatch(string $value1, string $value2): bool
     {

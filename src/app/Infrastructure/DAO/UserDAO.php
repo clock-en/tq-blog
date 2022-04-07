@@ -9,6 +9,9 @@ final class UserDAO extends SqlDAO
 
     /**
      * ユーザー追加
+     * @param string $name
+     * @param string $email
+     * @param string $password
      */
     public function create(string $name, string $email, string $password): void
     {
@@ -27,6 +30,8 @@ final class UserDAO extends SqlDAO
 
     /**
      * ユーザー検索
+     * @param string $email
+     * @return array | null
      */
     public function findByMail(string $email): ?array
     {

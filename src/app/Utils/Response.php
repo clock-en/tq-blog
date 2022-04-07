@@ -5,6 +5,7 @@ class Response
 {
     /**
      * リダイレクト
+     * @param string $path
      */
     static function redirect(string $path): void
     {
