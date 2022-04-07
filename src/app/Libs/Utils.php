@@ -10,11 +10,4 @@ class Utils
         header("Location: {$path}");
         exit();
     }
-    static function isEmptyArray(array $array): bool
-    {
-        if (!empty($array)) {
-            return false;
-        }
-        return true;
-    }
 }

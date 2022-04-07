@@ -1,7 +1,10 @@
 <?php
+require_once '../../vendor/autoload.php';
 require_once '../../app/Libs/Utils.php';
-require_once '../../app/Libs/UserDB.php';
 require_once '../../app/Libs/Validator.php';
+
+use App\Infrastructure\DAO\UserDAO;
+
 $errors = [];
 $email = '';
 $password = '';
@@ -23,8 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['password'] = 'パスワードを入力してください。';
     }
     if (empty($errors)) {
-        $user = UserDB::findByMailWithPassword($email, $password);
-        if (!is_null($user)) {
+        $userDAO = new UserDAO();
+        $user = $userDAO->findByMail($email);
+        if (!is_null($user) && password_verify($password, $user['password'])) {
             session_regenerate_id(true);
             $_SESSION['login'] = [
                 'name' => $user['name'],

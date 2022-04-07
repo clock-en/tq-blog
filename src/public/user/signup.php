@@ -1,7 +1,10 @@
 <?php
+require_once '../../vendor/autoload.php';
 require_once '../../app/Libs/Utils.php';
-require_once '../../app/Libs/UserDB.php';
 require_once '../../app/Libs/Validator.php';
+
+use App\Infrastructure\DAO\UserDAO;
+
 $errors = [];
 $name = '';
 $email = '';
@@ -28,9 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $user = UserDB::findByMail($email);
+        $userDAO = new UserDAO();
+        $user = $userDAO->findByMail($email);
         if (is_null($user)) {
-            UserDB::create($name, $email, $password);
+            $userDao->create($name, $email, $password);
             Utils::redirect('./signin.php');
         }
         $errors['passwordConfirm'] =
