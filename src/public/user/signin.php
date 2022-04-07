@@ -1,9 +1,9 @@
 <?php
 require_once '../../vendor/autoload.php';
-require_once '../../app/Libs/Utils.php';
-require_once '../../app/Libs/Validator.php';
 
 use App\Infrastructure\DAO\UserDAO;
+use App\Utils\Response;
+use App\Utils\Validator;
 
 $errors = [];
 $email = '';
@@ -13,12 +13,12 @@ session_start();
 
 if (isset($_SESSION['login'])) {
     session_regenerate_id(true);
-    Utils::redirect('../index.php');
+    Response::redirect('../index.php');
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = Utils::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-    $password = Utils::sanitize(filter_input(INPUT_POST, 'password') ?? '');
+    $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
+    $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
     if (!Validator::isNotBlank($email)) {
         $errors['email'] = 'メールアドレスを入力してください。';
     }
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'name' => $user['name'],
                 'email' => $user['email'],
             ];
-            Utils::redirect('../index.php');
+            Response::redirect('../index.php');
         }
         $errors['system'] = 'メールアドレスまたはパスワードが違います。';
     }
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="error"><?php echo $errors['system']; ?>
 <?php endif; ?>
     <div>
-      <input name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
+      <input type="email" name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
 <?php if (!empty($errors['email'])): ?>
         <div class="error"><?php echo $errors['email']; ?>
 <?php endif; ?>

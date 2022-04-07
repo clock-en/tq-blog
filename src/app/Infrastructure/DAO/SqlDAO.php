@@ -4,6 +4,9 @@ namespace App\Infrastructure\DAO;
 use \PDO;
 use \PDOException;
 
+/**
+ * SQL形式のDAOベースクラス
+ */
 class SqlDAO
 {
     protected PDO $pdo;
@@ -20,6 +23,7 @@ class SqlDAO
             exit('DB接続エラー: ' . $e->getMessage());
         }
     }
+
     public function __destruct()
     {
         unset($this->pdo);
