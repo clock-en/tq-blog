@@ -1,7 +1,10 @@
 <?php
-require_once '../../app/Libs/Utils.php';
-require_once '../../app/Libs/UserDB.php';
-require_once '../../app/Libs/Validator.php';
+require_once '../../vendor/autoload.php';
+
+use App\Infrastructure\DAO\UserDAO;
+use App\Utils\Response;
+use App\Utils\Validator;
+
 $errors = [];
 $name = '';
 $email = '';
@@ -9,10 +12,10 @@ $password = '';
 $passwordConfirm = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = Utils::sanitize(filter_input(INPUT_POST, 'name') ?? '');
-    $email = Utils::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-    $password = Utils::sanitize(filter_input(INPUT_POST, 'password') ?? '');
-    $passwordConfirm = Utils::sanitize(
+    $name = Validator::sanitize(filter_input(INPUT_POST, 'name') ?? '');
+    $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
+    $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
+    $passwordConfirm = Validator::sanitize(
         filter_input(INPUT_POST, 'password_confirm') ?? ''
     );
     if (!Validator::isNotBlank($name)) {
@@ -28,10 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $user = UserDB::findByMail($email);
+        $userDAO = new UserDAO();
+        $user = $userDAO->findByMail($email);
         if (is_null($user)) {
-            UserDB::create($name, $email, $password);
-            Utils::redirect('./signin.php');
+            $userDAO->create($name, $email, $password);
+            Response::redirect('./signin.php');
         }
         $errors['passwordConfirm'] =
             '入力したメールアドレスは既に入力済みです。';
