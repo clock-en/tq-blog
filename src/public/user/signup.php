@@ -1,7 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\UserDao;
+use App\Infrastructure\Dao\UserSqlDao;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $userDAO = new UserDao();
+        $userDAO = new UserSqlDao();
         $user = $userDAO->findByMail($email);
         if (is_null($user)) {
             $userDAO->create($name, $email, $password);
