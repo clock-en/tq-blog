@@ -1,7 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\DAO\UserDAO;
+use App\Infrastructure\Dao\UserDao;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['password'] = 'パスワードを入力してください。';
     }
     if (empty($errors)) {
-        $userDAO = new UserDAO();
+        $userDAO = new UserDao();
         $user = $userDAO->findByMail($email);
         if (!is_null($user) && password_verify($password, $user['password'])) {
             session_regenerate_id(true);

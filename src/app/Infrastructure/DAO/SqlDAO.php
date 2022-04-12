@@ -1,5 +1,5 @@
 <?php
-namespace App\Infrastructure\DAO;
+namespace App\Infrastructure\Dao;
 
 use \PDO;
 use \PDOException;
@@ -7,7 +7,7 @@ use \PDOException;
 /**
  * SQL形式のDAOベースクラス
  */
-class SqlDAO
+class SqlDao
 {
     protected PDO $pdo;
 
