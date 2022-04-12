@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userDAO = new UserSqlDao();
         $user = $userDAO->findByMail($email);
         if (!is_null($user) && password_verify($password, $user['password'])) {
-            $loginDao->getLoginUser($user['name'], $user['email']);
+            $loginDao->setLoginUser($user['name'], $user['email']);
             Response::redirect('../index.php');
         }
         $errors['system'] = 'メールアドレスまたはパスワードが違います。';
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+<?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>ログイン</h1>
     <form method="POST" novalidate>

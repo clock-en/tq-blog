@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+<?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>会員登録</h1>
     <form method="POST" action="./signup.php" novalidate>
