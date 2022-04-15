@@ -1,7 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\DAO\UserDAO;
+use App\Infrastructure\Dao\UserSqlDao;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $userDAO = new UserDAO();
+        $userDAO = new UserSqlDao();
         $user = $userDAO->findByMail($email);
         if (is_null($user)) {
             $userDAO->create($name, $email, $password);
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+<?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>会員登録</h1>
     <form method="POST" action="./signup.php" novalidate>

@@ -1,9 +1,9 @@
 <?php
-namespace App\Infrastructure\DAO;
+namespace App\Infrastructure\Dao;
 
-use \PDO;
+use PDO;
 
-final class UserDAO extends SqlDAO
+final class UserSqlDao extends SqlDao
 {
     const TABLE_NAME = 'users';
 

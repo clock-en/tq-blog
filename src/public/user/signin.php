@@ -1,7 +1,8 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\DAO\UserDAO;
+use App\Infrastructure\Dao\UserSqlDao;
+use App\Infrastructure\Dao\LoginSessionDao;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -11,8 +12,8 @@ $password = '';
 
 session_start();
 
-if (isset($_SESSION['login'])) {
-    session_regenerate_id(true);
+$loginDao = new LoginSessionDao();
+if (!is_null($loginDao->getLoginUser())) {
     Response::redirect('../index.php');
 }
 
@@ -26,14 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['password'] = 'パスワードを入力してください。';
     }
     if (empty($errors)) {
-        $userDAO = new UserDAO();
+        $userDAO = new UserSqlDao();
         $user = $userDAO->findByMail($email);
         if (!is_null($user) && password_verify($password, $user['password'])) {
-            session_regenerate_id(true);
-            $_SESSION['login'] = [
-                'name' => $user['name'],
-                'email' => $user['email'],
-            ];
+            $loginDao->setLoginUser($user['name'], $user['email']);
             Response::redirect('../index.php');
         }
         $errors['system'] = 'メールアドレスまたはパスワードが違います。';
@@ -49,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+<?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>ログイン</h1>
     <form method="POST" novalidate>

@@ -1,10 +1,11 @@
 <?php
-$user = null;
-// TODO: PHPSESSIDにsecure属性とhttpOnly属性をセットしたい
+require_once '../vendor/autoload.php';
+
+use App\Infrastructure\Dao\LoginSessionDao;
+
 session_start();
-if (isset($_SESSION['login'])) {
-    $user = $_SESSION['login'];
-}
+$loginDao = new LoginSessionDao();
+$user = $loginDao->getLoginUser();
 ?><!doctype html>
 <html>
 <head>
@@ -15,10 +16,13 @@ if (isset($_SESSION['login'])) {
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+<?php require_once './includes/header.php'; ?>
 <?php
 echo 'Welcome TECH QUEST!';
 if (!is_null($user)) {
-    echo "<p>{$user['name']}さん。こんにちは。";
+    echo "<p>{$user['name']}さん。こんにちは。</p>";
+} else {
+    echo '<p><a href="/user/signin.php">ログイン</p>';
 }
 ?>
 </body>
