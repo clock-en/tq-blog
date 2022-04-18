@@ -11,8 +11,8 @@ final class LoginSessionDao
         }
         return null;
     }
-    public function setLoginUser(string $name, string $email): void
+    public function setLoginUser(string $id, string $name): void
     {
-        $_SESSION[self::SESSION_NAME] = ['name' => $name, 'email' => $email];
+        $_SESSION[self::SESSION_NAME] = ['id' => $id, 'name' => $name];
     }
 }

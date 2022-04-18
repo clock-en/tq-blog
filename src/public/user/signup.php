@@ -1,9 +1,9 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\UserSqlDao;
 use App\UseCase\UseCaseInput\SignupInput;
 use App\UseCase\UseCaseInteractor\SignupInteractor;
+use App\Infrastructure\Dao\MessagesSessionDao;
 use App\Exception\InputErrorExeception;
 use App\Utils\Response;
 use App\Utils\Validator;
@@ -13,6 +13,9 @@ $name = '';
 $email = '';
 $password = '';
 $passwordConfirm = '';
+
+session_start();
+$messagesDao = new MessagesSessionDao();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -42,17 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ))->setErrors($errors);
         }
 
-        $useCaseInput = new SignupInput($name, $email, $password);
-        $useCase = new SignupInteractor($useCaseInput);
-        $useCaseOutput = $useCase->handle();
+        $input = new SignupInput($name, $email, $password);
+        $usecase = new SignupInteractor($input);
+        $output = $usecase->handle();
 
-        if (!$useCaseOutput->isSuccess()) {
+        if (!$output->isSuccess()) {
             throw (new InputErrorExeception(
                 '入力された値に誤りがあります',
                 400
-            ))->setErrors(['email' => $useCaseOutput->getMessage()]);
+            ))->setErrors(['email' => $output->getMessage()]);
         }
-        $_SESSION['flash'][] = $useCaseOutput->getMessage();
+        $messagesDao->setMessage($output->getMessage());
         Response::redirect('./signin.php');
     } catch (InputErrorExeception $e) {
         $errors = array_merge($errors, $e->getErrors());
@@ -75,25 +78,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div>
         <input name="name" placeholder="ユーザー名" maxlength="255" value="<?php echo $name; ?>">
 <?php if (!empty($errors['name'])): ?>
-        <div class="error"><?php echo $errors['name']; ?>
+        <div class="error"><?php echo $errors['name']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
 <?php if (!empty($errors['email'])): ?>
-        <div class="error"><?php echo $errors['email']; ?>
+        <div class="error"><?php echo $errors['email']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
 <?php if (!empty($errors['password'])): ?>
-        <div class="error"><?php echo $errors['password']; ?>
+        <div class="error"><?php echo $errors['password']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input type="password" name="password_confirm" placeholder="Password確認" maxlength="20" value="<?php echo $passwordConfirm; ?>">
 <?php if (!empty($errors['passwordConfirm'])): ?>
-        <div class="error"><?php echo $errors['passwordConfirm']; ?>
+        <div class="error"><?php echo $errors['passwordConfirm']; ?></div>
 <?php endif; ?>
       </div>
       <div>
