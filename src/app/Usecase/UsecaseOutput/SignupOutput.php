@@ -12,11 +12,19 @@ final class SignupOutput
         $this->message = $message;
     }
 
+    /**
+     * インタラクト結果の取得
+     * @return bool
+     */
     public function isSuccess(): bool
     {
         return $this->isSuccess;
     }
 
+    /**
+     * インタラクトメッセージの取得
+     * @return string
+     */
     public function getMessage(): string
     {
         return $this->message;

@@ -20,6 +20,10 @@ final class SigninInteractor
         $this->input = $input;
     }
 
+    /**
+     * インタラクタ実行
+     * @return SigninOutput
+     */
     public function handle(): SigninOutput
     {
         $user = $this->findUser();
@@ -31,11 +35,20 @@ final class SigninInteractor
         return new SigninOutput(true, self::COMPLETE_MESSAGE);
     }
 
+    /**
+     * ユーザー取得
+     * @return array | null
+     */
     private function findUser(): ?array
     {
         return $this->userDao->findByMail($this->input->getEmail());
     }
 
+    /**
+     * パスワード認証
+     * @param string $password
+     * @return bool
+     */
     private function isInvalidPassword(string $password): bool
     {
         return !password_verify($this->input->getPassword(), $password);

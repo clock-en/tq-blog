@@ -19,6 +19,10 @@ final class SignupInteractor
         $this->input = $input;
     }
 
+    /**
+     * インタラクタ実行
+     * @return SigninOutput
+     */
     public function handle(): SignupOutput
     {
         $user = $this->findUser();
@@ -29,11 +33,18 @@ final class SignupInteractor
         return new SignupOutput(true, self::COMPLETE_MESSAGE);
     }
 
+    /**
+     * ユーザー取得
+     * @return array | null
+     */
     private function findUser(): ?array
     {
         return $this->userDao->findByMail($this->input->getEmail());
     }
 
+    /**
+     * ユーザー作成
+     */
     private function createUser(): void
     {
         $name = $this->input->getName();

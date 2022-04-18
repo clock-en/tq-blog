@@ -12,11 +12,19 @@ final class SigninInput
         $this->password = $password;
     }
 
+    /**
+     * email入力を取得
+     * @return string
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * password入力を取得
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->password;
