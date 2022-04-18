@@ -2,6 +2,9 @@
 require_once '../../vendor/autoload.php';
 
 use App\Infrastructure\Dao\UserSqlDao;
+use App\UseCase\UseCaseInput\SignupInput;
+use App\UseCase\UseCaseInteractor\SignupInteractor;
+use App\Exception\InputErrorExeception;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -12,33 +15,47 @@ $password = '';
 $passwordConfirm = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = Validator::sanitize(filter_input(INPUT_POST, 'name') ?? '');
-    $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-    $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
-    $passwordConfirm = Validator::sanitize(
-        filter_input(INPUT_POST, 'password_confirm') ?? ''
-    );
-    if (!Validator::isNotBlank($name)) {
-        $errors['name'] = 'ユーザー名を入力してください。';
-    }
-    if (!Validator::isNotBlank($email)) {
-        $errors['email'] = 'メールアドレスを入力してください。';
-    }
-    if (!Validator::isNotBlank($password)) {
-        $errors['password'] = 'パスワードを入力してください。';
-    } elseif (!Validator::isMatch($password, $passwordConfirm)) {
-        $errors['passwordConfirm'] = 'パスワードが一致しません。';
-    }
-
-    if (empty($errors)) {
-        $userDAO = new UserSqlDao();
-        $user = $userDAO->findByMail($email);
-        if (is_null($user)) {
-            $userDAO->create($name, $email, $password);
-            Response::redirect('./signin.php');
+    try {
+        $name = Validator::sanitize(filter_input(INPUT_POST, 'name') ?? '');
+        $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
+        $password = Validator::sanitize(
+            filter_input(INPUT_POST, 'password') ?? ''
+        );
+        $passwordConfirm = Validator::sanitize(
+            filter_input(INPUT_POST, 'password_confirm') ?? ''
+        );
+        if (!Validator::isNotBlank($name)) {
+            $errors['name'] = 'ユーザー名を入力してください。';
         }
-        $errors['passwordConfirm'] =
-            '入力したメールアドレスは既に入力済みです。';
+        if (!Validator::isNotBlank($email)) {
+            $errors['email'] = 'メールアドレスを入力してください。';
+        }
+        if (!Validator::isNotBlank($password)) {
+            $errors['password'] = 'パスワードを入力してください。';
+        } elseif (!Validator::isMatch($password, $passwordConfirm)) {
+            $errors['passwordConfirm'] = 'パスワードが一致しません。';
+        }
+        if (!empty($errors)) {
+            throw (new InputErrorExeception(
+                '入力された値に誤りがあります',
+                400
+            ))->setErrors($errors);
+        }
+
+        $useCaseInput = new SignupInput($name, $email, $password);
+        $useCase = new SignupInteractor($useCaseInput);
+        $useCaseOutput = $useCase->handle();
+
+        if (!$useCaseOutput->isSuccess()) {
+            throw (new InputErrorExeception(
+                '入力された値に誤りがあります',
+                400
+            ))->setErrors(['email' => $useCaseOutput->getMessage()]);
+        }
+        $_SESSION['flash'][] = $useCaseOutput->getMessage();
+        Response::redirect('./signin.php');
+    } catch (InputErrorExeception $e) {
+        $errors = array_merge($errors, $e->getErrors());
     }
 }
 ?><!doctype html>
