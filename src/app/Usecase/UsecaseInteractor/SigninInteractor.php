@@ -3,7 +3,7 @@ namespace App\UseCase\UseCaseInteractor;
 
 use App\UseCase\UseCaseInput\SigninInput;
 use App\UseCase\UseCaseOutput\SigninOutput;
-use App\Infrastructure\Dao\LoginSessionDao;
+use App\Infrastructure\Dao\AuthSessionDao;
 use App\Infrastructure\Dao\UserSqlDao;
 
 final class SigninInteractor
@@ -26,8 +26,8 @@ final class SigninInteractor
         if (is_null($user) || $this->isInvalidPassword($user['password'])) {
             return new SigninOutput(false, self::FAILED_MESSAGE);
         }
-        $loginDao = new LoginSessionDao();
-        $loginDao->setLoginUser($user['id'], $user['name']);
+        $authDao = new AuthSessionDao();
+        $authDao->setSigninUser($user['id'], $user['name']);
         return new SigninOutput(true, self::COMPLETE_MESSAGE);
     }
 

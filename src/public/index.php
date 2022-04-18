@@ -1,11 +1,11 @@
 <?php
 require_once '../vendor/autoload.php';
 
-use App\Infrastructure\Dao\LoginSessionDao;
+use App\Infrastructure\Dao\AuthSessionDao;
 
 session_start();
-$loginDao = new LoginSessionDao();
-$user = $loginDao->getLoginUser();
+$authDao = new AuthSessionDao();
+$user = $authDao->getSigninUser();
 ?><!doctype html>
 <html>
 <head>

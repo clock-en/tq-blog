@@ -4,7 +4,7 @@ require_once '../../vendor/autoload.php';
 use App\UseCase\UseCaseInput\SigninInput;
 use App\UseCase\UseCaseInteractor\SigninInteractor;
 use App\Infrastructure\Dao\MessagesSessionDao;
-use App\Infrastructure\Dao\LoginSessionDao;
+use App\Infrastructure\Dao\AuthSessionDao;
 use App\Exception\InputErrorExeception;
 use App\Utils\Response;
 use App\Utils\Validator;
@@ -16,8 +16,8 @@ $password = '';
 session_start();
 $messagesDao = new MessagesSessionDao();
 $messages = $messagesDao->getMessages();
-$loginDao = new LoginSessionDao();
-if (!is_null($loginDao->getLoginUser())) {
+$authDao = new AuthSessionDao();
+if (!is_null($authDao->getSigninUser())) {
     Response::redirect('../index.php');
 }
 
