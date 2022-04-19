@@ -1,59 +1,32 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\UseCase\UseCaseInput\SigninInput;
-use App\UseCase\UseCaseInteractor\SigninInteractor;
 use App\Infrastructure\Dao\MessagesSessionDao;
 use App\Infrastructure\Dao\AuthSessionDao;
-use App\Exception\InputErrorExeception;
+use App\Infrastructure\Dao\FormDataSessionDao;
+use App\Infrastructure\Dao\ErrorsSessionDao;
 use App\Utils\Response;
-use App\Utils\Validator;
 
 $errors = [];
 $email = '';
 $password = '';
 
 session_start();
+
+$formDataDao = new FormDataSessionDao();
+$formData = $formDataDao->getFormData() ?? [];
+$errorsDao = new ErrorsSessionDao();
+$errors = $errorsDao->getErrors() ?? [];
 $messagesDao = new MessagesSessionDao();
 $messages = $messagesDao->getMessages();
+
 $authDao = new AuthSessionDao();
 if (!is_null($authDao->getSigninUser())) {
     Response::redirect('../index.php');
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-        $password = Validator::sanitize(
-            filter_input(INPUT_POST, 'password') ?? ''
-        );
-        if (!Validator::isNotBlank($email)) {
-            $errors['email'] = 'メールアドレスを入力してください。';
-        }
-        if (!Validator::isNotBlank($password)) {
-            $errors['password'] = 'パスワードを入力してください。';
-        }
-        if (!empty($errors)) {
-            throw (new InputErrorExeception(
-                '入力された値に誤りがあります',
-                400
-            ))->setErrors($errors);
-        }
-        $input = new SigninInput($email, $password);
-        $usecase = new SigninInteractor($input);
-        $output = $usecase->handle();
-        if (!$output->isSuccess()) {
-            throw (new InputErrorExeception(
-                '入力された値に誤りがあります',
-                400
-            ))->setErrors(['system' => $output->getMessage()]);
-        }
-        $messagesDao->setMessage($output->getMessage());
-        Response::redirect('../index.php');
-    } catch (InputErrorExeception $e) {
-        $errors = array_merge($errors, $e->getErrors());
-    }
-}
+$email = $formData['email'] ?? '';
+$password = $formData['password'] ?? '';
 ?><!doctype html>
 <html>
 <head>
@@ -73,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endforeach; ?>
 <?php endif; ?>
 
-    <form method="POST" novalidate>
+    <form method="POST" action="./signin_complete.php" novalidate>
 <?php if (!empty($errors['system'])): ?>
     <div class="error"><?php echo $errors['system']; ?></div>
 <?php endif; ?>

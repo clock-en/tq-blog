@@ -5,11 +5,11 @@ final class MessagesSessionDao
 {
     const SESSION_NAME = 'messages';
 
-    private $messages = [];
+    private $messages;
 
     public function __construct()
     {
-        $this->messages = $_SESSION[self::SESSION_NAME];
+        $this->messages = $_SESSION[self::SESSION_NAME] ?? [];
         unset($_SESSION[self::SESSION_NAME]);
     }
 
@@ -31,6 +31,7 @@ final class MessagesSessionDao
      */
     public function setMessage(string $message): void
     {
+        $this->messages[] = $message;
         $_SESSION[self::SESSION_NAME][] = $message;
     }
 }
