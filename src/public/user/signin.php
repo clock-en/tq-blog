@@ -1,10 +1,11 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\UserSqlDao;
-use App\Infrastructure\Dao\LoginSessionDao;
+use App\Infrastructure\Dao\MessagesSessionDao;
+use App\Infrastructure\Dao\AuthSessionDao;
+use App\Infrastructure\Dao\FormDataSessionDao;
+use App\Infrastructure\Dao\ErrorsSessionDao;
 use App\Utils\Response;
-use App\Utils\Validator;
 
 $errors = [];
 $email = '';
@@ -12,30 +13,20 @@ $password = '';
 
 session_start();
 
-$loginDao = new LoginSessionDao();
-if (!is_null($loginDao->getLoginUser())) {
+$formDataDao = new FormDataSessionDao();
+$formData = $formDataDao->getFormData() ?? [];
+$errorsDao = new ErrorsSessionDao();
+$errors = $errorsDao->getErrors() ?? [];
+$messagesDao = new MessagesSessionDao();
+$messages = $messagesDao->getMessages();
+
+$authDao = new AuthSessionDao();
+if (!is_null($authDao->getSigninUser())) {
     Response::redirect('../index.php');
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-    $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
-    if (!Validator::isNotBlank($email)) {
-        $errors['email'] = 'メールアドレスを入力してください。';
-    }
-    if (!Validator::isNotBlank($password)) {
-        $errors['password'] = 'パスワードを入力してください。';
-    }
-    if (empty($errors)) {
-        $userDAO = new UserSqlDao();
-        $user = $userDAO->findByMail($email);
-        if (!is_null($user) && password_verify($password, $user['password'])) {
-            $loginDao->setLoginUser($user['name'], $user['email']);
-            Response::redirect('../index.php');
-        }
-        $errors['system'] = 'メールアドレスまたはパスワードが違います。';
-    }
-}
+$email = $formData['email'] ?? '';
+$password = $formData['password'] ?? '';
 ?><!doctype html>
 <html>
 <head>
@@ -49,20 +40,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>ログイン</h1>
-    <form method="POST" novalidate>
+<?php if (!is_null($messages)): ?>
+    <?php foreach ($messages as $m): ?>
+    <div class="success"><?php echo $m; ?></div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+    <form method="POST" action="./signin_complete.php" novalidate>
 <?php if (!empty($errors['system'])): ?>
-    <div class="error"><?php echo $errors['system']; ?>
+    <div class="error"><?php echo $errors['system']; ?></div>
 <?php endif; ?>
     <div>
       <input type="email" name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
 <?php if (!empty($errors['email'])): ?>
-        <div class="error"><?php echo $errors['email']; ?>
+        <div class="error"><?php echo $errors['email']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
 <?php if (!empty($errors['password'])): ?>
-        <div class="error"><?php echo $errors['password']; ?>
+        <div class="error"><?php echo $errors['password']; ?></div>
 <?php endif; ?>
       </div>
       <div>

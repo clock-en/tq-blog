@@ -1,46 +1,19 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\UserSqlDao;
-use App\Utils\Response;
-use App\Utils\Validator;
+use App\Infrastructure\Dao\FormDataSessionDao;
+use App\Infrastructure\Dao\ErrorsSessionDao;
 
-$errors = [];
-$name = '';
-$email = '';
-$password = '';
-$passwordConfirm = '';
+session_start();
+$formDataDao = new FormDataSessionDao();
+$formData = $formDataDao->getFormData() ?? [];
+$errorsDao = new ErrorsSessionDao();
+$errors = $errorsDao->getErrors() ?? [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = Validator::sanitize(filter_input(INPUT_POST, 'name') ?? '');
-    $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
-    $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
-    $passwordConfirm = Validator::sanitize(
-        filter_input(INPUT_POST, 'password_confirm') ?? ''
-    );
-    if (!Validator::isNotBlank($name)) {
-        $errors['name'] = 'ユーザー名を入力してください。';
-    }
-    if (!Validator::isNotBlank($email)) {
-        $errors['email'] = 'メールアドレスを入力してください。';
-    }
-    if (!Validator::isNotBlank($password)) {
-        $errors['password'] = 'パスワードを入力してください。';
-    } elseif (!Validator::isMatch($password, $passwordConfirm)) {
-        $errors['passwordConfirm'] = 'パスワードが一致しません。';
-    }
-
-    if (empty($errors)) {
-        $userDAO = new UserSqlDao();
-        $user = $userDAO->findByMail($email);
-        if (is_null($user)) {
-            $userDAO->create($name, $email, $password);
-            Response::redirect('./signin.php');
-        }
-        $errors['passwordConfirm'] =
-            '入力したメールアドレスは既に入力済みです。';
-    }
-}
+$name = $formData['name'] ?? '';
+$email = $formData['email'] ?? '';
+$password = $formData['password'] ?? '';
+$passwordConfirm = $formData['passwordConfirm'] ?? '';
 ?><!doctype html>
 <html>
 <head>
@@ -54,29 +27,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>会員登録</h1>
-    <form method="POST" action="./signup.php" novalidate>
+    <form method="POST" action="./signup_complete.php" novalidate>
       <div>
         <input name="name" placeholder="ユーザー名" maxlength="255" value="<?php echo $name; ?>">
 <?php if (!empty($errors['name'])): ?>
-        <div class="error"><?php echo $errors['name']; ?>
+        <div class="error"><?php echo $errors['name']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
 <?php if (!empty($errors['email'])): ?>
-        <div class="error"><?php echo $errors['email']; ?>
+        <div class="error"><?php echo $errors['email']; ?></div>
 <?php endif; ?>
       </div>
       <div>
         <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
 <?php if (!empty($errors['password'])): ?>
-        <div class="error"><?php echo $errors['password']; ?>
+        <div class="error"><?php echo $errors['password']; ?></div>
 <?php endif; ?>
       </div>
       <div>
-        <input type="password" name="password_confirm" placeholder="Password確認" maxlength="20" value="<?php echo $passwordConfirm; ?>">
+        <input type="password" name="passwordConfirm" placeholder="Password確認" maxlength="20" value="<?php echo $passwordConfirm; ?>">
 <?php if (!empty($errors['passwordConfirm'])): ?>
-        <div class="error"><?php echo $errors['passwordConfirm']; ?>
+        <div class="error"><?php echo $errors['passwordConfirm']; ?></div>
 <?php endif; ?>
       </div>
       <div>
