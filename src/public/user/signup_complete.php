@@ -3,10 +3,8 @@ require_once '../../vendor/autoload.php';
 
 use App\UseCase\UseCaseInput\SignupInput;
 use App\UseCase\UseCaseInteractor\SignupInteractor;
-use App\Infrastructure\Dao\MessagesSessionDao;
-use App\Infrastructure\Dao\FormDataSessionDao;
-use App\Infrastructure\Dao\ErrorsSessionDao;
 use App\Exception\InputErrorExeception;
+use App\Utils\Session;
 use App\Utils\Response;
 use App\Utils\Validator;
 
@@ -24,7 +22,7 @@ $passwordConfirm = Validator::sanitize(
 );
 
 try {
-    session_start();
+    $session = Session::getInstance();
     if (!Validator::isNotBlank($name)) {
         $errors['name'] = 'ユーザー名を入力してください。';
     }
@@ -54,18 +52,16 @@ try {
         ))->setErrors(['email' => $output->getMessage()]);
     }
 
-    $messagesDao = new MessagesSessionDao();
-    $messagesDao->setMessage($output->getMessage());
+    $session->appendMessage($output->getMessage());
     Response::redirect('./signin.php');
 } catch (InputErrorExeception $e) {
-    $formDataDao = new FormDataSessionDao();
-    $errorsDao = new ErrorsSessionDao();
-
     $formData = compact('name', 'email', 'password', 'passwordConfirm');
-    $formDataDao->setFormData($formData);
+    $session->setFormInputs($formData);
 
-    $errors = array_merge($errors, $e->getErrors());
-    $errorsDao->setErrors($errors);
+    $errors = $e->getErrors();
+    foreach ($errors as $key => $error) {
+        $session->appendError($key, $error);
+    }
 
     Response::redirect('./signup.php');
 }
