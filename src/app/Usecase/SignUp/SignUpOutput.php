@@ -1,7 +1,7 @@
 <?php
-namespace App\UseCase\UseCaseOutput;
+namespace App\UseCase\SignUp;
 
-final class SigninOutput
+final class SignUpOutput
 {
     private $isSuccess;
     private $message;

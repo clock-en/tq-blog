@@ -1,8 +1,8 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\UseCase\UseCaseInput\SignupInput;
-use App\UseCase\UseCaseInteractor\SignupInteractor;
+use App\UseCase\SignUp\SignUpInput;
+use App\UseCase\SignUp\SignUpInteractor;
 use App\Exception\InputErrorExeception;
 use App\Utils\Session;
 use App\Utils\Response;
@@ -41,8 +41,8 @@ try {
         ))->setErrors($errors);
     }
 
-    $input = new SignupInput($name, $email, $password);
-    $usecase = new SignupInteractor($input);
+    $input = new SignUpInput($name, $email, $password);
+    $usecase = new SignUpInteractor($input);
     $output = $usecase->handle();
 
     if (!$output->isSuccess()) {

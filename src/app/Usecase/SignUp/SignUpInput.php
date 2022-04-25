@@ -1,15 +1,26 @@
 <?php
-namespace App\UseCase\UseCaseInput;
+namespace App\UseCase\SignUp;
 
-final class SigninInput
+final class SignUpInput
 {
+    private $name;
     private $email;
     private $password;
 
-    public function __construct(string $email, string $password)
+    public function __construct(string $name, string $email, string $password)
     {
+        $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+    }
+
+    /**
+     * name入力を取得
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
