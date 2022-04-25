@@ -1,19 +1,16 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\FormDataSessionDao;
-use App\Infrastructure\Dao\ErrorsSessionDao;
+use App\Utils\Session;
 
-session_start();
-$formDataDao = new FormDataSessionDao();
-$formData = $formDataDao->getFormData() ?? [];
-$errorsDao = new ErrorsSessionDao();
-$errors = $errorsDao->getErrors() ?? [];
+$session = Session::getInstance();
+$formInputs = $session->popFormInputs();
+$errors = $session->popErrors();
 
-$name = $formData['name'] ?? '';
-$email = $formData['email'] ?? '';
-$password = $formData['password'] ?? '';
-$passwordConfirm = $formData['passwordConfirm'] ?? '';
+$name = $formInputs['name'] ?? '';
+$email = $formInputs['email'] ?? '';
+$password = $formInputs['password'] ?? '';
+$passwordConfirm = $formInputs['passwordConfirm'] ?? '';
 ?><!doctype html>
 <html>
 <head>

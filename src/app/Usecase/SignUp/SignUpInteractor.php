@@ -1,11 +1,9 @@
 <?php
-namespace App\UseCase\UseCaseInteractor;
+namespace App\UseCase\SignUp;
 
-use App\UseCase\UseCaseInput\SignupInput;
-use App\UseCase\UseCaseOutput\SignupOutput;
 use App\Infrastructure\Dao\UserSqlDao;
 
-final class SignupInteractor
+final class SignUpInteractor
 {
     const ALREADY_EXIST_MESSAGE = '入力したメールアドレスは既に入力済みです。';
     const COMPLETE_MESSAGE = '登録が完了しました。';
@@ -13,7 +11,7 @@ final class SignupInteractor
     private $userDao;
     private $input;
 
-    public function __construct(SignupInput $input)
+    public function __construct(SignUpInput $input)
     {
         $this->userDao = new UserSqlDao();
         $this->input = $input;
@@ -21,16 +19,16 @@ final class SignupInteractor
 
     /**
      * インタラクタ実行
-     * @return SigninOutput
+     * @return SignUpOutput
      */
-    public function handle(): SignupOutput
+    public function handle(): SignUpOutput
     {
         $user = $this->findUser();
         if (!is_null($user)) {
-            return new SignupOutput(false, self::ALREADY_EXIST_MESSAGE);
+            return new SignUpOutput(false, self::ALREADY_EXIST_MESSAGE);
         }
         $this->createUser();
-        return new SignupOutput(true, self::COMPLETE_MESSAGE);
+        return new SignUpOutput(true, self::COMPLETE_MESSAGE);
     }
 
     /**

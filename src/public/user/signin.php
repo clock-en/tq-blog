@@ -1,32 +1,21 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Infrastructure\Dao\MessagesSessionDao;
-use App\Infrastructure\Dao\AuthSessionDao;
-use App\Infrastructure\Dao\FormDataSessionDao;
-use App\Infrastructure\Dao\ErrorsSessionDao;
+use App\Utils\Session;
 use App\Utils\Response;
 
-$errors = [];
-$email = '';
-$password = '';
+$session = Session::getInstance();
 
-session_start();
+$formInputs = $session->popFormInputs();
+$errors = $session->popErrors();
+$messages = $session->popMessages();
 
-$formDataDao = new FormDataSessionDao();
-$formData = $formDataDao->getFormData() ?? [];
-$errorsDao = new ErrorsSessionDao();
-$errors = $errorsDao->getErrors() ?? [];
-$messagesDao = new MessagesSessionDao();
-$messages = $messagesDao->getMessages();
-
-$authDao = new AuthSessionDao();
-if (!is_null($authDao->getSigninUser())) {
+if ($session->existsUser()) {
     Response::redirect('../index.php');
 }
 
-$email = $formData['email'] ?? '';
-$password = $formData['password'] ?? '';
+$email = $formInputs['email'] ?? '';
+$password = $formInputs['password'] ?? '';
 ?><!doctype html>
 <html>
 <head>
@@ -40,11 +29,9 @@ $password = $formData['password'] ?? '';
 <?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>ログイン</h1>
-<?php if (!is_null($messages)): ?>
-    <?php foreach ($messages as $m): ?>
+<?php foreach ($messages as $m): ?>
     <div class="success"><?php echo $m; ?></div>
-    <?php endforeach; ?>
-<?php endif; ?>
+<?php endforeach; ?>
 
     <form method="POST" action="./signin_complete.php" novalidate>
 <?php if (!empty($errors['system'])): ?>

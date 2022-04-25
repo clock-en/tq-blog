@@ -1,12 +1,10 @@
 <?php
-namespace App\UseCase\UseCaseInteractor;
+namespace App\UseCase\SignIn;
 
-use App\UseCase\UseCaseInput\SigninInput;
-use App\UseCase\UseCaseOutput\SigninOutput;
-use App\Infrastructure\Dao\AuthSessionDao;
 use App\Infrastructure\Dao\UserSqlDao;
+use App\Utils\Session;
 
-final class SigninInteractor
+final class SignInInteractor
 {
     const FAILED_MESSAGE = 'メールアドレスまたはパスワードが違います。';
     const COMPLETE_MESSAGE = 'ログインしました。';
@@ -14,7 +12,7 @@ final class SigninInteractor
     private $userDao;
     private $input;
 
-    public function __construct(SigninInput $input)
+    public function __construct(SignInInput $input)
     {
         $this->userDao = new UserSqlDao();
         $this->input = $input;
@@ -22,17 +20,17 @@ final class SigninInteractor
 
     /**
      * インタラクタ実行
-     * @return SigninOutput
+     * @return SignInOutput
      */
-    public function handle(): SigninOutput
+    public function handle(): SignInOutput
     {
         $user = $this->findUser();
         if (is_null($user) || $this->isInvalidPassword($user['password'])) {
-            return new SigninOutput(false, self::FAILED_MESSAGE);
+            return new SignInOutput(false, self::FAILED_MESSAGE);
         }
-        $authDao = new AuthSessionDao();
-        $authDao->setSigninUser($user['id'], $user['name']);
-        return new SigninOutput(true, self::COMPLETE_MESSAGE);
+        $session = Session::getInstance();
+        $session->setUser($user['id'], $user['name']);
+        return new SignInOutput(true, self::COMPLETE_MESSAGE);
     }
 
     /**
