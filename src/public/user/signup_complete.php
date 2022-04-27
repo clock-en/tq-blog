@@ -1,9 +1,11 @@
 <?php
 require_once '../../vendor/autoload.php';
 
+use App\Domain\ValueObject\UserName;
+use App\Domain\ValueObject\Email;
+use App\Domain\ValueObject\InputPassword;
 use App\UseCase\SignUp\SignUpInput;
 use App\UseCase\SignUp\SignUpInteractor;
-use App\Exception\InputErrorExeception;
 use App\Utils\Session;
 use App\Utils\Response;
 use App\Utils\Validator;
@@ -23,45 +25,37 @@ $passwordConfirm = Validator::sanitize(
 
 try {
     $session = Session::getInstance();
-    if (!Validator::isNotBlank($name)) {
-        $errors['name'] = 'ユーザー名を入力してください。';
+
+    if (empty($name)) {
+        throw new Exception('ユーザー名を入力してください。');
     }
-    if (!Validator::isNotBlank($email)) {
-        $errors['email'] = 'メールアドレスを入力してください。';
+    if (empty($email)) {
+        throw new Exception('メールアドレスを入力してください。');
     }
-    if (!Validator::isNotBlank($password)) {
-        $errors['password'] = 'パスワードを入力してください。';
-    } elseif (!Validator::isMatch($password, $passwordConfirm)) {
-        $errors['passwordConfirm'] = 'パスワードが一致しません。';
+    if (empty($password)) {
+        throw new Exception('パスワードを入力してください。');
     }
-    if (!empty($errors)) {
-        throw (new InputErrorExeception(
-            '入力された値に誤りがあります',
-            400
-        ))->setErrors($errors);
+    if ($password !== $passwordConfirm) {
+        throw new Exception('パスワードが一致しません。');
     }
 
-    $input = new SignUpInput($name, $email, $password);
+    $userName = new UserName($name);
+    $userEmail = new Email($email);
+    $userPassword = new InputPassword($password);
+    $input = new SignUpInput($userName, $userEmail, $userPassword);
     $usecase = new SignUpInteractor($input);
     $output = $usecase->handle();
 
     if (!$output->isSuccess()) {
-        throw (new InputErrorExeception(
-            '入力された値に誤りがあります',
-            400
-        ))->setErrors(['email' => $output->getMessage()]);
+        throw new Exception($output->getMessage());
     }
 
     $session->appendMessage($output->getMessage());
     Response::redirect('./signin.php');
-} catch (InputErrorExeception $e) {
+} catch (Exception $e) {
     $formData = compact('name', 'email', 'password', 'passwordConfirm');
     $session->setFormInputs($formData);
-
-    $errors = $e->getErrors();
-    foreach ($errors as $key => $error) {
-        $session->appendError($key, $error);
-    }
+    $session->appendError($e->getMessage());
 
     Response::redirect('./signup.php');
 }

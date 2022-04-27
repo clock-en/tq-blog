@@ -63,13 +63,12 @@ final class Session
 
     /**
      * エラーメッセージをセッションに追加する
-     * @param string $key
      * @param string $message
      */
-    public function appendError(string $key, string $message): void
+    public function appendError(string $message): void
     {
         $sessionKey = new SessionKey(SessionKey::ERRORS_KEY);
-        $_SESSION[$sessionKey->getKeyName()][$key] = $message;
+        $_SESSION[$sessionKey->getKeyName()][] = $message;
     }
 
     /**

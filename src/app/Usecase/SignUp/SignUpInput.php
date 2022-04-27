@@ -1,14 +1,21 @@
 <?php
 namespace App\UseCase\SignUp;
 
+use App\Domain\ValueObject\UserName;
+use App\Domain\ValueObject\Email;
+use App\Domain\ValueObject\InputPassword;
+
 final class SignUpInput
 {
-    private $name;
-    private $email;
-    private $password;
+    private UserName $name;
+    private Email $email;
+    private InputPassword $password;
 
-    public function __construct(string $name, string $email, string $password)
-    {
+    public function __construct(
+        UserName $name,
+        Email $email,
+        InputPassword $password
+    ) {
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
@@ -16,27 +23,27 @@ final class SignUpInput
 
     /**
      * name入力を取得
-     * @return string
+     * @return UserName
      */
-    public function getName(): string
+    public function getName(): UserName
     {
         return $this->name;
     }
 
     /**
      * email入力を取得
-     * @return string
+     * @return Email
      */
-    public function getEmail(): string
+    public function getEmail(): Email
     {
         return $this->email;
     }
 
     /**
      * password入力を取得
-     * @return string
+     * @return InputPassword
      */
-    public function getPassword(): string
+    public function getPassword(): InputPassword
     {
         return $this->password;
     }

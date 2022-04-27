@@ -1,9 +1,10 @@
 <?php
 require_once '../../vendor/autoload.php';
 
+use App\Domain\ValueObject\Email;
+use App\Domain\ValueObject\InputPassword;
 use App\UseCase\SignIn\SignInInput;
 use App\UseCase\SignIn\SignInInteractor;
-use App\Exception\InputErrorExeception;
 use App\Utils\Session;
 use App\Utils\Response;
 use App\Utils\Validator;
@@ -19,40 +20,29 @@ $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
 
 try {
     $session = Session::getInstance();
-    if (!Validator::isNotBlank($email)) {
-        $errors['email'] = 'メールアドレスを入力してください。';
-    }
-    if (!Validator::isNotBlank($password)) {
-        $errors['password'] = 'パスワードを入力してください。';
-    }
-    if (!empty($errors)) {
-        throw (new InputErrorExeception(
-            '入力された値に誤りがあります',
-            400
-        ))->setErrors($errors);
-    }
 
-    $input = new SignInInput($email, $password);
+    if (empty($email)) {
+        throw new Exception('メールアドレスを入力してください。');
+    }
+    if (empty($password)) {
+        throw new Exception('パスワードを入力してください。');
+    }
+    $userEmail = new Email($email);
+    $userPassword = new InputPassword($password);
+    $input = new SignInInput($userEmail, $userPassword);
     $usecase = new SignInInteractor($input);
     $output = $usecase->handle();
 
     if (!$output->isSuccess()) {
-        throw (new InputErrorExeception(
-            '入力された値に誤りがあります',
-            400
-        ))->setErrors(['system' => $output->getMessage()]);
+        throw new Exception($output->getMessage());
     }
 
     $session->appendMessage($output->getMessage());
     Response::redirect('../index.php');
-} catch (InputErrorExeception $e) {
+} catch (Exception $e) {
     $formData = compact('email', 'password');
     $session->setFormInputs($formData);
-
-    $errors = $e->getErrors();
-    foreach ($errors as $key => $error) {
-        $session->appendError($key, $error);
-    }
+    $session->appendError($e->getMessage());
 
     Response::redirect('./signin.php');
 }
