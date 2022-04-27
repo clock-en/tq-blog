@@ -45,7 +45,7 @@ final class InputPassword
      * @param string $value
      * @return bool
      */
-    private function isInvalid($value): bool
+    private function isInvalid(string $value): bool
     {
         return !preg_match(self::PASSWORD_REG_EXP, $value);
     }

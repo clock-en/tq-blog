@@ -133,7 +133,7 @@ final class Session
 
     /**
      * セッションからログインユーザーの情報を取得する
-     * @return array
+     * @return array | null
      */
     public function getUser(): ?array
     {
@@ -165,7 +165,7 @@ final class Session
     /**
      * セッションの破棄
      */
-    public function destroy()
+    public function destroy(): void
     {
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 3600, '/');

@@ -56,9 +56,8 @@ final class SignInInteractor
     /**
      * ログインユーザー情報をセッションに保存
      * @param array $user
-     * @return bool
      */
-    private function saveSession(array $user)
+    private function saveSession(array $user): void
     {
         $session = Session::getInstance();
         $session->setUser($user['id'], $user['name']);

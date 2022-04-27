@@ -31,7 +31,7 @@ final class UserName
      * @param string $value
      * @return bool
      */
-    private function isInvalid($value)
+    private function isInvalid(string $value): bool
     {
         return mb_strlen($value) > 20;
     }

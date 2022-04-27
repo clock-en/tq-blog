@@ -32,7 +32,7 @@ final class Email
      * @param string $value
      * @return bool
      */
-    private function isInvalid($value)
+    private function isInvalid(string $value): bool
     {
         return !preg_match(self::EMAIL_REG_EXP, $value);
     }
