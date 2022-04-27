@@ -22,10 +22,10 @@ final class SignUpOutput
     }
 
     /**
-     * インタラクトメッセージの取得
+     * フラッシュメッセージの取得
      * @return string
      */
-    public function getMessage(): string
+    public function message(): string
     {
         return $this->message;
     }

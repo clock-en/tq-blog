@@ -63,13 +63,12 @@ final class Session
 
     /**
      * エラーメッセージをセッションに追加する
-     * @param string $key
      * @param string $message
      */
-    public function appendError(string $key, string $message): void
+    public function appendError(string $message): void
     {
         $sessionKey = new SessionKey(SessionKey::ERRORS_KEY);
-        $_SESSION[$sessionKey->getKeyName()][$key] = $message;
+        $_SESSION[$sessionKey->getKeyName()][] = $message;
     }
 
     /**
@@ -134,7 +133,7 @@ final class Session
 
     /**
      * セッションからログインユーザーの情報を取得する
-     * @return array
+     * @return array | null
      */
     public function getUser(): ?array
     {
@@ -166,7 +165,7 @@ final class Session
     /**
      * セッションの破棄
      */
-    public function destroy()
+    public function destroy(): void
     {
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 3600, '/');

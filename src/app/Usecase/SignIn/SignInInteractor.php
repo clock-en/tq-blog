@@ -25,11 +25,12 @@ final class SignInInteractor
     public function handle(): SignInOutput
     {
         $user = $this->findUser();
+
         if (is_null($user) || $this->isInvalidPassword($user['password'])) {
             return new SignInOutput(false, self::FAILED_MESSAGE);
         }
-        $session = Session::getInstance();
-        $session->setUser($user['id'], $user['name']);
+
+        $this->saveSession($user);
         return new SignInOutput(true, self::COMPLETE_MESSAGE);
     }
 
@@ -39,7 +40,7 @@ final class SignInInteractor
      */
     private function findUser(): ?array
     {
-        return $this->userDao->findByMail($this->input->getEmail());
+        return $this->userDao->findByMail($this->input->email()->value());
     }
 
     /**
@@ -49,6 +50,16 @@ final class SignInInteractor
      */
     private function isInvalidPassword(string $password): bool
     {
-        return !password_verify($this->input->getPassword(), $password);
+        return !password_verify($this->input->password()->value(), $password);
+    }
+
+    /**
+     * ログインユーザー情報をセッションに保存
+     * @param array $user
+     */
+    private function saveSession(array $user): void
+    {
+        $session = Session::getInstance();
+        $session->setUser($user['id'], $user['name']);
     }
 }

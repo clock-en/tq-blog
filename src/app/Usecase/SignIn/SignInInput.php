@@ -1,12 +1,15 @@
 <?php
 namespace App\UseCase\SignIn;
 
+use App\Domain\ValueObject\Email;
+use App\Domain\ValueObject\InputPassword;
+
 final class SignInInput
 {
-    private $email;
-    private $password;
+    private Email $email;
+    private InputPassword $password;
 
-    public function __construct(string $email, string $password)
+    public function __construct(Email $email, InputPassword $password)
     {
         $this->email = $email;
         $this->password = $password;
@@ -14,18 +17,18 @@ final class SignInInput
 
     /**
      * email入力を取得
-     * @return string
+     * @return Email
      */
-    public function getEmail(): string
+    public function email(): Email
     {
         return $this->email;
     }
 
     /**
      * password入力を取得
-     * @return string
+     * @return InputPassword
      */
-    public function getPassword(): string
+    public function password(): InputPassword
     {
         return $this->password;
     }

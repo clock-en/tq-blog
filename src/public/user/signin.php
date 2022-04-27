@@ -32,22 +32,16 @@ $password = $formInputs['password'] ?? '';
 <?php foreach ($messages as $m): ?>
     <div class="success"><?php echo $m; ?></div>
 <?php endforeach; ?>
+<?php foreach ($errors as $e): ?>
+    <div class="error"><?php echo $e; ?></div>
+<?php endforeach; ?>
 
     <form method="POST" action="./signin_complete.php" novalidate>
-<?php if (!empty($errors['system'])): ?>
-    <div class="error"><?php echo $errors['system']; ?></div>
-<?php endif; ?>
-    <div>
-      <input type="email" name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
-<?php if (!empty($errors['email'])): ?>
-        <div class="error"><?php echo $errors['email']; ?></div>
-<?php endif; ?>
+      <div>
+        <input type="email" name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
       </div>
       <div>
         <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
-<?php if (!empty($errors['password'])): ?>
-        <div class="error"><?php echo $errors['password']; ?></div>
-<?php endif; ?>
       </div>
       <div>
         <button type="submit">ログイン</button>

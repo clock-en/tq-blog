@@ -24,30 +24,21 @@ $passwordConfirm = $formInputs['passwordConfirm'] ?? '';
 <?php require_once '../includes/header.php'; ?>
   <div class="container">
     <h1>会員登録</h1>
+<?php foreach ($errors as $e): ?>
+    <div class="error"><?php echo $e; ?></div>
+<?php endforeach; ?>
     <form method="POST" action="./signup_complete.php" novalidate>
       <div>
         <input name="name" placeholder="ユーザー名" maxlength="255" value="<?php echo $name; ?>">
-<?php if (!empty($errors['name'])): ?>
-        <div class="error"><?php echo $errors['name']; ?></div>
-<?php endif; ?>
       </div>
       <div>
         <input name="email" placeholder="メールアドレス" maxlength="255" value="<?php echo $email; ?>">
-<?php if (!empty($errors['email'])): ?>
-        <div class="error"><?php echo $errors['email']; ?></div>
-<?php endif; ?>
       </div>
       <div>
         <input type="password" name="password" placeholder="Password" maxlength="20" value="<?php echo $password; ?>">
-<?php if (!empty($errors['password'])): ?>
-        <div class="error"><?php echo $errors['password']; ?></div>
-<?php endif; ?>
       </div>
       <div>
         <input type="password" name="passwordConfirm" placeholder="Password確認" maxlength="20" value="<?php echo $passwordConfirm; ?>">
-<?php if (!empty($errors['passwordConfirm'])): ?>
-        <div class="error"><?php echo $errors['passwordConfirm']; ?></div>
-<?php endif; ?>
       </div>
       <div>
         <button type="submit">アカウント作成</button>
