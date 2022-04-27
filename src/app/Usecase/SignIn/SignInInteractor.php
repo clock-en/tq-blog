@@ -40,7 +40,7 @@ final class SignInInteractor
      */
     private function findUser(): ?array
     {
-        return $this->userDao->findByMail($this->input->getEmail()->getValue());
+        return $this->userDao->findByMail($this->input->email()->value());
     }
 
     /**
@@ -50,10 +50,7 @@ final class SignInInteractor
      */
     private function isInvalidPassword(string $password): bool
     {
-        return !password_verify(
-            $this->input->getPassword()->getValue(),
-            $password
-        );
+        return !password_verify($this->input->password()->value(), $password);
     }
 
     /**

@@ -25,7 +25,7 @@ final class SignUpInput
      * name入力を取得
      * @return UserName
      */
-    public function getName(): UserName
+    public function name(): UserName
     {
         return $this->name;
     }
@@ -34,7 +34,7 @@ final class SignUpInput
      * email入力を取得
      * @return Email
      */
-    public function getEmail(): Email
+    public function email(): Email
     {
         return $this->email;
     }
@@ -43,7 +43,7 @@ final class SignUpInput
      * password入力を取得
      * @return InputPassword
      */
-    public function getPassword(): InputPassword
+    public function password(): InputPassword
     {
         return $this->password;
     }

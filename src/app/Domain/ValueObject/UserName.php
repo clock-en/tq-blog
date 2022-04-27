@@ -21,7 +21,7 @@ final class UserName
      * Value値を取得
      * @return string
      */
-    public function getValue(): string
+    public function value(): string
     {
         return $this->value;
     }

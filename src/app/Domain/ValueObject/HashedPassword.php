@@ -7,17 +7,14 @@ final class HashedPassword
 
     public function __construct(InputPassword $inputPassword)
     {
-        $this->value = password_hash(
-            $inputPassword->getValue(),
-            PASSWORD_DEFAULT
-        );
+        $this->value = password_hash($inputPassword->value(), PASSWORD_DEFAULT);
     }
 
     /**
      * Value値を取得
      * @return string
      */
-    public function getValue(): string
+    public function value(): string
     {
         return $this->value;
     }

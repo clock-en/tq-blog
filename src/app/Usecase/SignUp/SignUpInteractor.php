@@ -37,7 +37,7 @@ final class SignUpInteractor
      */
     private function findUser(): ?array
     {
-        return $this->userDao->findByMail($this->input->getEmail()->getValue());
+        return $this->userDao->findByMail($this->input->email()->value());
     }
 
     /**
@@ -45,9 +45,9 @@ final class SignUpInteractor
      */
     private function createUser(): void
     {
-        $name = $this->input->getName()->getValue();
-        $email = $this->input->getEmail()->getValue();
-        $password = $this->input->getPassword()->getValue();
+        $name = $this->input->name()->value();
+        $email = $this->input->email()->value();
+        $password = $this->input->password()->value();
         $this->userDao->create($name, $email, $password);
     }
 }

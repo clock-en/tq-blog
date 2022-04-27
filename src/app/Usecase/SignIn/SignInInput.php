@@ -19,7 +19,7 @@ final class SignInInput
      * email入力を取得
      * @return Email
      */
-    public function getEmail(): Email
+    public function email(): Email
     {
         return $this->email;
     }
@@ -28,7 +28,7 @@ final class SignInInput
      * password入力を取得
      * @return InputPassword
      */
-    public function getPassword(): InputPassword
+    public function password(): InputPassword
     {
         return $this->password;
     }
