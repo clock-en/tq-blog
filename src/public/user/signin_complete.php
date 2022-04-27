@@ -34,10 +34,10 @@ try {
     $output = $usecase->handle();
 
     if (!$output->isSuccess()) {
-        throw new Exception($output->getMessage());
+        throw new Exception($output->message());
     }
 
-    $session->appendMessage($output->getMessage());
+    $session->appendMessage($output->message());
     Response::redirect('../index.php');
 } catch (Exception $e) {
     $formData = compact('email', 'password');
