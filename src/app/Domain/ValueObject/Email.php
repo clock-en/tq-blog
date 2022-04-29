@@ -8,7 +8,7 @@ final class Email
     const EMAIL_REG_EXP = "/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/";
     const INVALID_MESSAGE = 'メールアドレスの形式が正しくありません。';
 
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {

@@ -8,7 +8,7 @@ final class UserId
     const MIN_VALUE = 1;
     const INVALID_MESSAGE = '不正な値です。';
 
-    private $value;
+    private int $value;
 
     public function __construct(int $value)
     {

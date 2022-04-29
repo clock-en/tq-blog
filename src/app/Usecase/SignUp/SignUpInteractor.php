@@ -8,8 +8,8 @@ final class SignUpInteractor
     const ALREADY_EXIST_MESSAGE = '入力したメールアドレスは既に入力済みです。';
     const COMPLETE_MESSAGE = '登録が完了しました。';
 
-    private $userDao;
-    private $input;
+    private UserSqlDao $userDao;
+    private SignUpInput $input;
 
     public function __construct(SignUpInput $input)
     {

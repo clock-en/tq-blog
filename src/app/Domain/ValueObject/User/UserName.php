@@ -8,7 +8,7 @@ final class UserName
     const MAX_LENGTH = 20;
     const INVALID_MESSAGE = 'お名前は20文字以内でご入力ください。';
 
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {

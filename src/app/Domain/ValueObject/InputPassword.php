@@ -12,7 +12,7 @@ final class InputPassword
     const PASSWORD_REG_EXP = '/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}+\z/i';
     const INVALID_MESSAGE = 'パスワードの形式が正しくありません。';
 
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {
