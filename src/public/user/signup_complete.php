@@ -1,7 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Domain\ValueObject\UserName;
+use App\Domain\ValueObject\User\UserName;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\InputPassword;
 use App\UseCase\SignUp\SignUpInput;

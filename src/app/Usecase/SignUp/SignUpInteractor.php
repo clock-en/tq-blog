@@ -23,8 +23,8 @@ final class SignUpInteractor
      */
     public function handle(): SignUpOutput
     {
-        $user = $this->findUser();
-        if (!is_null($user)) {
+        $userMapper = $this->findUser();
+        if (!is_null($userMapper)) {
             return new SignUpOutput(false, self::ALREADY_EXIST_MESSAGE);
         }
         $this->createUser();

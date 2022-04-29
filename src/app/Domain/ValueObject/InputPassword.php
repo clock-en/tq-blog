@@ -37,7 +37,9 @@ final class InputPassword
      */
     public function hash(): HashedPassword
     {
-        return new HashedPassword($this);
+        return new HashedPassword(
+            password_hash($this->value, PASSWORD_DEFAULT)
+        );
     }
 
     /**

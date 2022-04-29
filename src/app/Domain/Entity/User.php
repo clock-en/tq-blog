@@ -1,28 +1,41 @@
 <?php
-namespace App\UseCase\SignUp;
+namespace App\Domain\Entity;
 
+use App\Domain\ValueObject\User\UserId;
 use App\Domain\ValueObject\User\UserName;
 use App\Domain\ValueObject\Email;
-use App\Domain\ValueObject\InputPassword;
+use App\Domain\ValueObject\HashedPassword;
 
-final class SignUpInput
+final class User
 {
+    private UserId $id;
     private UserName $name;
     private Email $email;
-    private InputPassword $password;
+    private HashedPassword $password;
 
     public function __construct(
+        UserId $id,
         UserName $name,
         Email $email,
-        InputPassword $password
+        HashedPassword $password
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
     }
 
     /**
-     * name入力を取得
+     * ユーザーIDを取得
+     * @return UserId
+     */
+    public function id(): UserId
+    {
+        return $this->id;
+    }
+
+    /**
+     * ユーザー名を取得
      * @return UserName
      */
     public function name(): UserName
@@ -31,7 +44,7 @@ final class SignUpInput
     }
 
     /**
-     * email入力を取得
+     * ユーザーのメールアドレスを取得
      * @return Email
      */
     public function email(): Email
@@ -40,10 +53,10 @@ final class SignUpInput
     }
 
     /**
-     * password入力を取得
-     * @return InputPassword
+     * ユーザーのパスワードを取得
+     * @return HashedPassword
      */
-    public function password(): InputPassword
+    public function password(): HashedPassword
     {
         return $this->password;
     }

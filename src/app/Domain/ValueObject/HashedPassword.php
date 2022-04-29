@@ -3,11 +3,12 @@ namespace App\Domain\ValueObject;
 
 final class HashedPassword
 {
-    private $value;
+    private string $value;
 
-    public function __construct(InputPassword $inputPassword)
+    public function __construct(string $value)
     {
-        $this->value = password_hash($inputPassword->value(), PASSWORD_DEFAULT);
+        // TODO: ハッシュ化された文字列かどうかを判別する方法が見つかったら実装
+        $this->value = $value;
     }
 
     /**
@@ -17,5 +18,15 @@ final class HashedPassword
     public function value(): string
     {
         return $this->value;
+    }
+
+    /**
+     * パスワードの照合関数
+     * @param InputPassword
+     * @return bool
+     */
+    public function verify(InputPassword $password): bool
+    {
+        return password_verify($password->value(), $this->value);
     }
 }

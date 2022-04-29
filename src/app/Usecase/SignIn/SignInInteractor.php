@@ -1,6 +1,11 @@
 <?php
 namespace App\UseCase\SignIn;
 
+use App\Domain\Entity\User;
+use App\Domain\ValueObject\User\UserId;
+use App\Domain\ValueObject\User\UserName;
+use App\Domain\ValueObject\Email;
+use App\Domain\ValueObject\HashedPassword;
 use App\Infrastructure\Dao\UserSqlDao;
 use App\Utils\Session;
 
@@ -9,8 +14,8 @@ final class SignInInteractor
     const FAILED_MESSAGE = 'メールアドレスまたはパスワードが違います。';
     const COMPLETE_MESSAGE = 'ログインしました。';
 
-    private $userDao;
-    private $input;
+    private UserSqlDao $userDao;
+    private SignInInput $input;
 
     public function __construct(SignInInput $input)
     {
@@ -24,9 +29,15 @@ final class SignInInteractor
      */
     public function handle(): SignInOutput
     {
-        $user = $this->findUser();
+        $userMapper = $this->findUser();
 
-        if (is_null($user) || $this->isInvalidPassword($user['password'])) {
+        if (is_null($userMapper)) {
+            return new SignInOutput(false, self::FAILED_MESSAGE);
+        }
+
+        $user = $this->buildUserEntity($userMapper);
+
+        if ($this->isInvalidPassword($user->password())) {
             return new SignInOutput(false, self::FAILED_MESSAGE);
         }
 
@@ -44,22 +55,36 @@ final class SignInInteractor
     }
 
     /**
+     * Userエンティティを生成
+     * @return User
+     */
+    private function buildUserEntity(array $userMapper): User
+    {
+        return new User(
+            new UserId($userMapper['id']),
+            new UserName($userMapper['name']),
+            new Email($userMapper['email']),
+            new HashedPassword($userMapper['password'])
+        );
+    }
+
+    /**
      * パスワード認証
-     * @param string $password
+     * @param HashedPassword $password
      * @return bool
      */
-    private function isInvalidPassword(string $password): bool
+    private function isInvalidPassword(HashedPassword $password): bool
     {
-        return !password_verify($this->input->password()->value(), $password);
+        return !$password->verify($this->input->password());
     }
 
     /**
      * ログインユーザー情報をセッションに保存
-     * @param array $user
+     * @param User $user
      */
-    private function saveSession(array $user): void
+    private function saveSession(User $user): void
     {
         $session = Session::getInstance();
-        $session->setUser($user['id'], $user['name']);
+        $session->setUser($user->id()->value(), $user->name()->value());
     }
 }

@@ -1,10 +1,11 @@
 <?php
-namespace App\Domain\ValueObject;
+namespace App\Domain\ValueObject\User;
 
 use Exception;
 
 final class UserName
 {
+    const MAX_LENGTH = 20;
     const INVALID_MESSAGE = 'お名前は20文字以内でご入力ください。';
 
     private $value;
@@ -33,6 +34,6 @@ final class UserName
      */
     private function isInvalid(string $value): bool
     {
-        return mb_strlen($value) > 20;
+        return mb_strlen($value) > self::MAX_LENGTH;
     }
 }
