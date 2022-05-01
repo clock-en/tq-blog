@@ -3,8 +3,8 @@ namespace App\UseCase\SignUp;
 
 final class SignUpOutput
 {
-    private $isSuccess;
-    private $message;
+    private bool $isSuccess;
+    private string $message;
 
     public function __construct(bool $isSuccess, string $message)
     {
