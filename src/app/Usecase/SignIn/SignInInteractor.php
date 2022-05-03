@@ -1,12 +1,9 @@
 <?php
 namespace App\UseCase\SignIn;
 
+use App\Adapter\QueryService\UserQueryService;
 use App\Domain\Entity\User;
-use App\Domain\ValueObject\User\UserId;
-use App\Domain\ValueObject\User\UserName;
-use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\HashedPassword;
-use App\Infrastructure\Dao\UserSqlDao;
 use App\Utils\Session;
 
 final class SignInInteractor
@@ -14,13 +11,13 @@ final class SignInInteractor
     const FAILED_MESSAGE = 'メールアドレスまたはパスワードが違います。';
     const COMPLETE_MESSAGE = 'ログインしました。';
 
-    private UserSqlDao $userDao;
     private SignInInput $input;
+    private UserQueryService $userQueryService;
 
     public function __construct(SignInInput $input)
     {
-        $this->userDao = new UserSqlDao();
         $this->input = $input;
+        $this->userQueryService = new UserQueryService();
     }
 
     /**
@@ -29,13 +26,11 @@ final class SignInInteractor
      */
     public function handle(): SignInOutput
     {
-        $userMapper = $this->findUser();
+        $user = $this->findUser();
 
-        if (is_null($userMapper)) {
+        if (!$this->existsUser($user)) {
             return new SignInOutput(false, self::FAILED_MESSAGE);
         }
-
-        $user = $this->buildUserEntity($userMapper);
 
         if ($this->isInvalidPassword($user->password())) {
             return new SignInOutput(false, self::FAILED_MESSAGE);
@@ -47,25 +42,21 @@ final class SignInInteractor
 
     /**
      * ユーザー取得
-     * @return array | null
+     * @return User|null
      */
-    private function findUser(): ?array
+    private function findUser(): ?User
     {
-        return $this->userDao->findByMail($this->input->email()->value());
+        return $this->userQueryService->findByMail($this->input->email());
     }
 
     /**
-     * Userエンティティを生成
-     * @return User
+     * ユーザーの存在チェック
+     * @param User|null
+     * @return bool
      */
-    private function buildUserEntity(array $userMapper): User
+    private function existsUser(?User $user)
     {
-        return new User(
-            new UserId($userMapper['id']),
-            new UserName($userMapper['name']),
-            new Email($userMapper['email']),
-            new HashedPassword($userMapper['password'])
-        );
+        return !is_null($user);
     }
 
     /**

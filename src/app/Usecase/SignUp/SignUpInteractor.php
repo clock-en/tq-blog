@@ -1,20 +1,25 @@
 <?php
 namespace App\UseCase\SignUp;
 
-use App\Infrastructure\Dao\UserSqlDao;
+use App\Adapter\QueryService\UserQueryService;
+use App\Adapter\Repository\UserRepository;
+use App\Domain\Entity\User;
+use App\Domain\ValueObject\User\NewUser;
 
 final class SignUpInteractor
 {
     const ALREADY_EXIST_MESSAGE = '入力したメールアドレスは既に入力済みです。';
     const COMPLETE_MESSAGE = '登録が完了しました。';
 
-    private UserSqlDao $userDao;
     private SignUpInput $input;
+    private UserQueryService $userQueryService;
+    private UserRepository $userRepository;
 
     public function __construct(SignUpInput $input)
     {
-        $this->userDao = new UserSqlDao();
         $this->input = $input;
+        $this->userQueryService = new UserQueryService();
+        $this->userRepository = new UserRepository();
     }
 
     /**
@@ -23,31 +28,44 @@ final class SignUpInteractor
      */
     public function handle(): SignUpOutput
     {
-        $userMapper = $this->findUser();
-        if (!is_null($userMapper)) {
+        $user = $this->findUser();
+        if ($this->existsUser($user)) {
             return new SignUpOutput(false, self::ALREADY_EXIST_MESSAGE);
         }
-        $this->createUser();
+        $this->signUp();
         return new SignUpOutput(true, self::COMPLETE_MESSAGE);
     }
 
     /**
      * ユーザー取得
-     * @return array | null
+     * @return User|null
      */
-    private function findUser(): ?array
+    private function findUser(): ?User
     {
-        return $this->userDao->findByMail($this->input->email()->value());
+        return $this->userQueryService->findByMail($this->input->email());
+    }
+
+    /**
+     * ユーザーの存在チェック
+     * @param User|null
+     * @return bool
+     */
+    private function existsUser(?User $user)
+    {
+        return !is_null($user);
     }
 
     /**
      * ユーザー作成
      */
-    private function createUser(): void
+    private function signUp(): void
     {
-        $name = $this->input->name()->value();
-        $email = $this->input->email()->value();
-        $password = $this->input->password()->value();
-        $this->userDao->create($name, $email, $password);
+        $this->userRepository->create(
+            new NewUser(
+                $this->input->name(),
+                $this->input->email(),
+                $this->input->password()
+            )
+        );
     }
 }
