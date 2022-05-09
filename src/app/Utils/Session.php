@@ -133,7 +133,7 @@ final class Session
 
     /**
      * セッションからログインユーザーの情報を取得する
-     * @return array | null
+     * @return array|null
      */
     public function getUser(): ?array
     {
