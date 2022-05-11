@@ -1,6 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
+use App\Adapter\Presenter\SignInPresenter;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\InputPassword;
 use App\UseCase\SignIn\SignInInput;
@@ -14,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     Response::redirect('./signin.php');
 }
 
-$errors = [];
 $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
 $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
 
@@ -31,13 +31,14 @@ try {
     $userPassword = new InputPassword($password);
     $input = new SignInInput($userEmail, $userPassword);
     $usecase = new SignInInteractor($input);
-    $output = $usecase->handle();
+    $presenter = new SignInPresenter($usecase->handle());
+    $signIn = $presenter->view();
 
-    if (!$output->isSuccess()) {
-        throw new Exception($output->message());
+    if (!$signIn['isSuccess']) {
+        throw new Exception($signIn['message']);
     }
 
-    $session->appendMessage($output->message());
+    $session->appendMessage($signIn['message']);
     Response::redirect('../index.php');
 } catch (Exception $e) {
     $formData = compact('email', 'password');

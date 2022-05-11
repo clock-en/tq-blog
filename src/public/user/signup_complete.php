@@ -1,6 +1,7 @@
 <?php
 require_once '../../vendor/autoload.php';
 
+use App\Adapter\Presenter\SignUpPresenter;
 use App\Domain\ValueObject\User\UserName;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\InputPassword;
@@ -15,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     Response::redirect('./signup.php');
 }
 
-$errors = [];
 $name = Validator::sanitize(filter_input(INPUT_POST, 'name') ?? '');
 $email = Validator::sanitize(filter_input(INPUT_POST, 'email') ?? '');
 $password = Validator::sanitize(filter_input(INPUT_POST, 'password') ?? '');
@@ -43,14 +43,16 @@ try {
     $userEmail = new Email($email);
     $userPassword = new InputPassword($password);
     $input = new SignUpInput($userName, $userEmail, $userPassword);
-    $usecase = new SignUpInteractor($input);
-    $output = $usecase->handle();
 
-    if (!$output->isSuccess()) {
-        throw new Exception($output->message());
+    $usecase = new SignUpInteractor($input);
+    $presenter = new SignUpPresenter($usecase->handle());
+    $signUp = $presenter->view();
+
+    if (!$signUp['isSuccess']) {
+        throw new Exception($signUp['message']);
     }
 
-    $session->appendMessage($output->message());
+    $session->appendMessage($signUp['message']);
     Response::redirect('./signin.php');
 } catch (Exception $e) {
     $formData = compact('name', 'email', 'password', 'passwordConfirm');
