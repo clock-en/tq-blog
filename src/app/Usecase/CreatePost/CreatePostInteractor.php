@@ -10,17 +10,12 @@ final class CreatePostInteractor
 {
     const COMPLETE_MESSAGE = '登録が完了しました。';
 
-    private UserId $userId;
     private CreatePostInput $input;
     private BlogRepository $blogRepository;
 
     public function __construct(CreatePostInput $input)
     {
-        $session = Session::getInstance();
-        $user = $session->getUser();
-
         $this->input = $input;
-        $this->userId = new UserId($user['id']);
         $this->blogRepository = new BlogRepository();
     }
 
@@ -30,18 +25,22 @@ final class CreatePostInteractor
      */
     public function handle(): CreatePostOutput
     {
-        $this->create();
+        $session = Session::getInstance();
+        $user = $session->getUser();
+        $userId = new UserId($user['id']);
+        $this->create($userId);
         return new CreatePostOutput(true, self::COMPLETE_MESSAGE);
     }
 
     /**
      * 新規記事作成
+     * @param UserId $userId
      */
-    private function create(): void
+    private function create(UserId $userId): void
     {
         $this->blogRepository->create(
             new NewPost(
-                $this->userId,
+                $userId,
                 $this->input->title(),
                 $this->input->contents()
             )
