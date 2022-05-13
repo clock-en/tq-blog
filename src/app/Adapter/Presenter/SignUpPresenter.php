@@ -13,6 +13,10 @@ final class SignUpPresenter
         $this->signUpOutput = $signUpOutput;
     }
 
+    /**
+     * ViewModelを返却
+     * @return array
+     */
     public function view(): array
     {
         $viewModel = new SignUpViewModel($this->signUpOutput);

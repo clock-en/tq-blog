@@ -1,13 +1,13 @@
 <?php
 namespace App\Adapter\ViewModel;
 
-use App\UseCase\SignIn\SignInOutput;
+use App\UseCase\CreatePost\CreatePostOutput;
 
-final class SignInViewModel
+final class CreatePostViewModel
 {
-    private SignInOutput $output;
+    private CreatePostOutput $output;
 
-    public function __construct(SignInOutput $output)
+    public function __construct(CreatePostOutput $output)
     {
         $this->output = $output;
     }

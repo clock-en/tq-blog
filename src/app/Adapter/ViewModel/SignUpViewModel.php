@@ -12,6 +12,10 @@ final class SignUpViewModel
         $this->output = $output;
     }
 
+    /**
+     * Web用ViewModelを返却
+     * @return array
+     */
     public function convertToWebView(): array
     {
         return [
