@@ -4,6 +4,7 @@ namespace App\UseCase\CreatePost;
 use App\Adapter\Repository\BlogRepository;
 use App\Domain\ValueObject\Post\NewPost;
 use App\Domain\ValueObject\User\UserId;
+use App\Utils\Session;
 
 final class CreatePostInteractor
 {
@@ -13,10 +14,13 @@ final class CreatePostInteractor
     private CreatePostInput $input;
     private BlogRepository $blogRepository;
 
-    public function __construct(UserId $userId, CreatePostInput $input)
+    public function __construct(CreatePostInput $input)
     {
-        $this->userId = $userId;
+        $session = Session::getInstance();
+        $user = $session->getUser();
+
         $this->input = $input;
+        $this->userId = new UserId($user['id']);
         $this->blogRepository = new BlogRepository();
     }
 

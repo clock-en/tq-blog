@@ -13,7 +13,7 @@ use App\Utils\Validator;
 
 // GETでのアクセス防止
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    Response::redirect('./signup.php');
+    Response::redirect('./create.php');
 }
 
 $title = Validator::sanitize(filter_input(INPUT_POST, 'title') ?? '');
@@ -29,10 +29,9 @@ try {
 
     $postTitle = new PostTitle($title);
     $postContents = new PostContents($contents);
-    $userId = new UserId($user['id']);
     $input = new CreatePostInput($postTitle, $postContents);
 
-    $usecase = new CreatePostInteractor($userId, $input);
+    $usecase = new CreatePostInteractor($input);
     $presenter = new CreatePostPresenter($usecase->handle());
     $result = $presenter->view();
 
