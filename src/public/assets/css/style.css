@@ -1,6 +1,16 @@
 body {
   margin: 0;
 }
+* {
+  box-sizing: border-box;
+}
+ul,
+ol,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -11,12 +21,82 @@ body {
 .header__logo {
   font-size: 24px;
 }
+.header__actions {
+  display: flex;
+  gap: 20px;
+}
 .container {
+  width: 1000px;
+  margin: 0 auto;
   text-align: center;
+}
+.container--left {
+  text-align: left;
 }
 .error {
   color: red;
 }
 .success {
   color: green;
+}
+
+.entries {
+  margin: 30px 0;
+}
+
+.entry-list {
+  display: flex;
+  gap: 20px;
+}
+.entry-list > li {
+  width: 25%;
+}
+
+.entry {
+  border: 1px solid #78909c;
+  border-radius: 5px;
+  padding: 20px;
+}
+.entry > *:first-child {
+  margin-top: 0;
+}
+.entry > *:last-child {
+  margin-bottom: 0;
+}
+.entry__header,
+.entry__body,
+.entry__footer {
+  margin: 10px 0;
+}
+.entry__header > *:first-child,
+.entry__body > *:first-child,
+.entry__footer > *:first-child {
+  margin-top: 0;
+}
+.entry__header > *:last-child,
+.entry__body > *:last-child,
+.entry__footer > *:last-child {
+  margin-bottom: 0;
+}
+.entry__footer {
+  text-align: right;
+}
+.entry__title {
+  margin-bottom: 5px;
+}
+.entry__datetime {
+  margin-bottom: 10px;
+}
+.entry__outline {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* トップページ */
+.sort {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
 }
