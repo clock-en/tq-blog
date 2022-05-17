@@ -2,11 +2,11 @@
 namespace App\Adapter\QueryService;
 
 use App\Infrastructure\Dao\ArticleSqlDao;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Article;
+use App\Domain\ValueObject\Article\ArticleId;
+use App\Domain\ValueObject\Article\ArticleTitle;
+use App\Domain\ValueObject\Article\ArticleContents;
 use App\Domain\ValueObject\User\UserId;
-use App\Domain\ValueObject\User\UserName;
-use App\Domain\ValueObject\Email;
-use App\Domain\ValueObject\HashedPassword;
 
 final class ArticleQueryService
 {
@@ -18,43 +18,43 @@ final class ArticleQueryService
     }
 
     /**
-     * ユーザーを検索し、取得したレコードをUserエンティティとして返却
-     * @return User|null
+     * 記事の一覧を取得する
+     * @return Article[]|null
      */
-    public function fetchPosts(): ?User
+    public function fetchArticles(): ?array
     {
-        $articleMapper = $this->blogDao->fetchPosts();
-        return $this->existsPost($articleMapper)
-            ? new User(
-                new UserId($userMapper['id']),
-                new UserName($userMapper['name']),
-                new Email($userMapper['email']),
-                new HashedPassword($userMapper['password'])
-            )
-            : [];
+        $articlesMapper = $this->articleDao->fetchArticles();
+        return $this->existsPost($articlesMapper)
+            ? $this->getArticleEntities($articlesMapper)
+            : null;
     }
 
     /**
-     * PostEntityの配列を生成
+     * ArticleEntityの配列を生成
      * @param array
-     * @return array
+     * @return Article[]
      */
-    public function createPostEntities(array $articles): array
+    private function getArticleEntities(array $articlesMapper): array
     {
         $output = [];
-        foreach ($articles as $article) {
-            $output[] = $article;
+        foreach ($articlesMapper as $article) {
+            $output[] = new Article(
+                new ArticleId($article['id']),
+                new UserId($article['user_id']),
+                new ArticleTitle($article['title']),
+                new ArticleContents($article['contents'])
+            );
         }
         return $output;
     }
 
     /**
-     * ユーザーの存在チェック
-     * @param array|null $articleMapper
+     * 記事の存在チェック
+     * @param array|null $mapper
      * @return bool
      */
-    private function existsPost(?array $articleMapper): bool
+    private function existsPost(?array $mapper): bool
     {
-        return !is_null($articleMapper);
+        return !is_null($mapper);
     }
 }
