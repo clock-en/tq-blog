@@ -1,12 +1,11 @@
 <?php
 require_once '../../vendor/autoload.php';
 
-use App\Adapter\Presenter\CreatePostPresenter;
-use App\UseCase\CreatePost\CreatePostInput;
-use App\UseCase\CreatePost\CreatePostInteractor;
-use App\Domain\ValueObject\Post\PostTitle;
-use App\Domain\ValueObject\Post\PostContents;
-use App\Domain\ValueObject\User\UserId;
+use App\Adapter\Presenter\PostCreatePresenter;
+use App\UseCase\CreateArticle\CreateArticleInput;
+use App\UseCase\CreateArticle\CreateArticleInteractor;
+use App\Domain\ValueObject\Article\ArticleTitle;
+use App\Domain\ValueObject\Article\ArticleContents;
 use App\Utils\Session;
 use App\Utils\Response;
 use App\Utils\Validator;
@@ -27,12 +26,12 @@ try {
         throw new Exception('タイトルを入力してください。');
     }
 
-    $postTitle = new PostTitle($title);
-    $postContents = new PostContents($contents);
-    $input = new CreatePostInput($postTitle, $postContents);
+    $articleTitle = new ArticleTitle($title);
+    $articleContents = new ArticleContents($contents);
+    $input = new CreateArticleInput($articleTitle, $articleContents);
 
-    $usecase = new CreatePostInteractor($input);
-    $presenter = new CreatePostPresenter($usecase->handle());
+    $usecase = new CreateArticleInteractor($input);
+    $presenter = new PostCreatePresenter($usecase->handle());
     $result = $presenter->view();
 
     if (!$result['isSuccess']) {

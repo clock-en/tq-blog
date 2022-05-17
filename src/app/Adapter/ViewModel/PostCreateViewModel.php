@@ -1,13 +1,13 @@
 <?php
 namespace App\Adapter\ViewModel;
 
-use App\UseCase\CreatePost\CreatePostOutput;
+use App\UseCase\CreateArticle\CreateArticleOutput;
 
-final class CreatePostViewModel
+final class PostCreateViewModel
 {
-    private CreatePostOutput $output;
+    private CreateArticleOutput $output;
 
-    public function __construct(CreatePostOutput $output)
+    public function __construct(CreateArticleOutput $output)
     {
         $this->output = $output;
     }

@@ -1,35 +1,35 @@
 <?php
-namespace App\UseCase\CreatePost;
+namespace App\UseCase\CreateArticle;
 
-use App\Adapter\Repository\BlogRepository;
-use App\Domain\ValueObject\Post\NewPost;
+use App\Adapter\Repository\ArticleRepository;
+use App\Domain\ValueObject\Article\NewArticle;
 use App\Domain\ValueObject\User\UserId;
 use App\Utils\Session;
 
-final class CreatePostInteractor
+final class CreateArticleInteractor
 {
     const COMPLETE_MESSAGE = '登録が完了しました。';
 
-    private CreatePostInput $input;
-    private BlogRepository $blogRepository;
+    private CreateArticleInput $input;
+    private ArticleRepository $articleRepository;
 
-    public function __construct(CreatePostInput $input)
+    public function __construct(CreateArticleInput $input)
     {
         $this->input = $input;
-        $this->blogRepository = new BlogRepository();
+        $this->articleRepository = new ArticleRepository();
     }
 
     /**
      * インタラクタ実行
-     * @return CreatePostOutput
+     * @return CreateArticleOutput
      */
-    public function handle(): CreatePostOutput
+    public function handle(): CreateArticleOutput
     {
         $session = Session::getInstance();
         $user = $session->getUser();
         $userId = new UserId($user['id']);
         $this->create($userId);
-        return new CreatePostOutput(true, self::COMPLETE_MESSAGE);
+        return new CreateArticleOutput(true, self::COMPLETE_MESSAGE);
     }
 
     /**
@@ -38,8 +38,8 @@ final class CreatePostInteractor
      */
     private function create(UserId $userId): void
     {
-        $this->blogRepository->create(
-            new NewPost(
+        $this->articleRepository->create(
+            new NewArticle(
                 $userId,
                 $this->input->title(),
                 $this->input->contents()

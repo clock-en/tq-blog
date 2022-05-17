@@ -1,7 +1,7 @@
 <?php
-namespace App\UseCase\CreatePost;
+namespace App\UseCase\CreateArticle;
 
-final class CreatePostOutput
+final class CreateArticleOutput
 {
     private bool $isSuccess;
     private string $message;

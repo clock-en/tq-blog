@@ -1,12 +1,12 @@
 <?php
-namespace App\Domain\ValueObject\Post;
+namespace App\Domain\ValueObject\Article;
 
 use Exception;
 
-final class PostTitle
+final class ArticleContents
 {
     const MAX_LENGTH = 255;
-    const INVALID_MESSAGE = 'タイトルは255文字以内でご入力ください';
+    const INVALID_MESSAGE = '内容は255文字以内でご入力ください';
 
     private string $value;
 
