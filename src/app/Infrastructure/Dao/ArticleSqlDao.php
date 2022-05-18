@@ -33,12 +33,12 @@ final class ArticleSqlDao extends SqlDao
      * 記事の一覧取得
      * @return array|null
      */
-    public function fetchArticles(): ?array
+    public function fetchAllArticles(): ?array
     {
         $sql = sprintf('SELECT * FROM %s', self::TABLE_NAME);
         $statement = $this->pdo->prepare($sql);
         $statement->execute();
-        $articles = $statement->fetch();
+        $articles = $statement->fetchAll();
         return $articles ? $articles : null;
     }
 }

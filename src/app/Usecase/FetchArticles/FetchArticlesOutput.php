@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\FetchArticle;
+namespace App\UseCase\FetchArticles;
 
 use App\Domain\Entity\Article;
 
@@ -9,13 +9,13 @@ final class FetchArticlesOutput
     private bool $isSuccess;
     /** @var string */
     private string $message;
-    /** @var Article[] */
+    /** @var ArrayObject<Article>|null */
     private ?array $articles;
 
     /**
      * @param bool $isSuccess
      * @param string $message
-     * @param Article[]|null $articles
+     * @param ArrayObject<Article>|null $articles
      */
     public function __construct(
         bool $isSuccess,
@@ -44,7 +44,7 @@ final class FetchArticlesOutput
     }
 
     /**
-     * @return Article[]|null
+     * @return ArrayObject<Article>|null
      */
     public function articles(): ?array
     {

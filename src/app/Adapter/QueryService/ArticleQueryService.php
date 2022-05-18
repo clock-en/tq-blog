@@ -19,11 +19,11 @@ final class ArticleQueryService
 
     /**
      * 記事の一覧を取得する
-     * @return Article[]|null
+     * @return ArrayObject<Article>|null
      */
-    public function fetchArticles(): ?array
+    public function fetchAllArticles(): ?array
     {
-        $articlesMapper = $this->articleDao->fetchArticles();
+        $articlesMapper = $this->articleDao->fetchAllArticles();
         return $this->existsPost($articlesMapper)
             ? $this->getArticleEntities($articlesMapper)
             : null;
@@ -32,7 +32,7 @@ final class ArticleQueryService
     /**
      * ArticleEntityの配列を生成
      * @param array
-     * @return Article[]
+     * @return ArrayObject<Article>
      */
     private function getArticleEntities(array $articlesMapper): array
     {

@@ -87,12 +87,6 @@ li {
 .entry__datetime {
   margin-bottom: 10px;
 }
-.entry__outline {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-}
 
 /* トップページ */
 .sort {
