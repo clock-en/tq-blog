@@ -46,10 +46,11 @@ li {
 
 .entry-list {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 .entry-list > li {
-  width: 25%;
+  width: calc(25% - 20px);
 }
 
 .entry {

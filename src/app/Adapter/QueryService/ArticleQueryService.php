@@ -7,6 +7,7 @@ use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleTitle;
 use App\Domain\ValueObject\Article\ArticleContents;
 use App\Domain\ValueObject\User\UserId;
+use App\Domain\ValueObject\JaDateTime;
 
 final class ArticleQueryService
 {
@@ -42,7 +43,8 @@ final class ArticleQueryService
                 new ArticleId($article['id']),
                 new UserId($article['user_id']),
                 new ArticleTitle($article['title']),
-                new ArticleContents($article['contents'])
+                new ArticleContents($article['contents']),
+                new JaDateTime($article['created_at'])
             );
         }
         return $output;

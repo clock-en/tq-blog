@@ -44,6 +44,7 @@ final class HomeViewModel
                 'id' => $article->id()->value(),
                 'title' => $article->title()->value(),
                 'contents' => $this->omitContens($article->contents()->value()),
+                'createdAt' => $article->createdAt()->value(),
             ];
         }
         return $output;
@@ -56,6 +57,6 @@ final class HomeViewModel
      */
     private function omitContens(string $contents): string
     {
-        return mb_strimwidth($contents, 0, 30, '…', 'UTF-8');
+        return mb_strimwidth($contents, 0, 15, '…', 'UTF-8');
     }
 }

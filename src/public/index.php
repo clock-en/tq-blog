@@ -7,6 +7,7 @@ use App\Utils\Response;
 use App\Utils\Session;
 
 $session = Session::getInstance();
+$messages = $session->popMessages();
 $user = $session->getUser();
 if (is_null($user)) {
     Response::redirect('./user/signin.php');
@@ -50,7 +51,9 @@ $homeViewModel = $presenter->view();
         <li class="entry">
           <div class="entry__header">
             <h2 class="entry__title"><?php echo $article['title']; ?></h2>
-            <div class="entry__datetime">日時</div>
+            <div class="entry__datetime">
+              <?php echo $article['createdAt']; ?>
+            </div>
           </div>
           <div class="entry__body">
             <?php echo $article['contents']; ?>
