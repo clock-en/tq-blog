@@ -1,18 +1,18 @@
 <?php
-namespace App\Domain\ValueObject\Post;
+namespace App\Domain\ValueObject\Article;
 
 use App\Domain\ValueObject\User\UserId;
 
-final class NewPost
+final class NewArticle
 {
     private UserId $userId;
-    private PostTitle $title;
-    private PostContents $contents;
+    private ArticleTitle $title;
+    private ArticleContents $contents;
 
     public function __construct(
         UserId $userId,
-        PostTitle $title,
-        PostContents $contents
+        ArticleTitle $title,
+        ArticleContents $contents
     ) {
         $this->userId = $userId;
         $this->title = $title;
@@ -28,17 +28,17 @@ final class NewPost
     }
 
     /**
-     * @return PostTitle
+     * @return ArticleTitle
      */
-    public function title(): PostTitle
+    public function title(): ArticleTitle
     {
         return $this->title;
     }
 
     /**
-     * @return PostContents
+     * @return ArticleContents
      */
-    public function contents(): PostContents
+    public function contents(): ArticleContents
     {
         return $this->contents;
     }
