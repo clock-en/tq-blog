@@ -9,10 +9,17 @@ final class FetchArticlesInteractor
     const EMPTY_MESSAGE = '記事が一件もありませんでした。';
     const COMPLETE_MESSAGE = '記事を取得しました。';
 
+    /** @var FetchArticlesInput */
+    private FetchArticlesInput $input;
+    /** @var ArticleQueryService */
     private ArticleQueryService $articleQueryService;
 
-    public function __construct()
+    /**
+     * @param FetchArticlesInput $input
+     */
+    public function __construct(FetchArticlesInput $input)
     {
+        $this->input = $input;
         $this->articleQueryService = new ArticleQueryService();
     }
 
@@ -22,8 +29,7 @@ final class FetchArticlesInteractor
      */
     public function handle(): FetchArticlesOutput
     {
-        $articles = $this->fetchAllArticles();
-
+        $articles = $this->fetchArticles();
         if (!$this->existsArticle($articles)) {
             return new FetchArticlesOutput(false, self::EMPTY_MESSAGE);
         }
@@ -35,9 +41,17 @@ final class FetchArticlesInteractor
      * 記事一覧の取得
      * @return ArrayObject<Article>|null
      */
-    private function fetchAllArticles(): ?array
+    private function fetchArticles()
     {
-        return $this->articleQueryService->fetchAllArticles();
+        if ($this->input->keyword()->value() === '') {
+            return $this->articleQueryService->fetchAllArticles(
+                $this->input->order()
+            );
+        }
+        return $this->articleQueryService->searchArticlesByKeyword(
+            $this->input->order(),
+            $this->input->keyword()
+        );
     }
 
     /**
