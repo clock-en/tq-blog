@@ -54,6 +54,25 @@ final class ArticleQueryService
     }
 
     /**
+     * 記事検索
+     * @param ArticleId $id
+     * @return Article|null
+     */
+    public function findById(ArticleId $id): ?array
+    {
+        $articleMapper = $this->articleDao->findById($id);
+        return $this->existsPost($articleMapper)
+            ? new Article(
+                new ArticleId($articleMapper['id']),
+                new UserId($articleMapper['user_id']),
+                new ArticleTitle($articleMapper['title']),
+                new ArticleContents($articleMapper['contents']),
+                new JaDateTime($articleMapper['created_at'])
+            )
+            : null;
+    }
+
+    /**
      * ArticleEntityの配列を生成
      * @param array
      * @return ArrayObject<Article>
