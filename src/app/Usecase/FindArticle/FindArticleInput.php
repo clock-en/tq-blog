@@ -5,21 +5,21 @@ use App\Domain\ValueObject\Article\ArticleId;
 
 final class FindArticleInput
 {
-    /** @var ArticleId */
-    private ArticleId $id;
+    /** @var ArticleId|null */
+    private ?ArticleId $id;
 
     /**
-     * @param ArticleId $id
+     * @param ArticleId|null $id
      */
-    public function __construct(ArticleId $id)
+    public function __construct(?ArticleId $id)
     {
         $this->id = $id;
     }
 
     /**
-     * @return ArticleId
+     * @return ArticleId|null
      */
-    public function id(): ArticleId
+    public function id(): ?ArticleId
     {
         return $this->id;
     }

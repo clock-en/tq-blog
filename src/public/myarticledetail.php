@@ -1,11 +1,10 @@
 <?php
 require_once '../vendor/autoload.php';
 
-use App\Adapter\Presenter\HomePresenter;
-use App\UseCase\FetchArticles\FetchArticlesInput;
-use App\UseCase\FetchArticles\FetchArticlesInteractor;
-use App\Domain\ValueObject\Order;
-use App\Domain\ValueObject\Article\ArticleKeyword;
+use App\Adapter\Presenter\MyArticleDetailPresenter;
+use App\UseCase\FindArticle\FindArticleInput;
+use App\UseCase\FindArticle\FindArticleInteractor;
+use App\Domain\ValueObject\Article\ArticleId;
 use App\Utils\Response;
 use App\Utils\Session;
 
@@ -16,17 +15,21 @@ $user = $session->getUser();
 if (is_null($user)) {
     Response::redirect('./user/signin.php');
 }
-$order = filter_input(INPUT_GET, 'order') ?? null;
-$keyword = filter_input(INPUT_GET, 'keyword') ?? '';
+$id = filter_input(INPUT_GET, 'id') ?? null;
 
 try {
-    $articleOrder = is_null($order) ? null : new Order($order);
-    $articleKeyword = new ArticleKeyword($keyword);
-    $input = new FetchArticlesInput($articleOrder, $articleKeyword);
+    $articleId = is_null($id) ? null : new ArticleId(intval($id));
+    $input = new FindArticleInput($articleId);
 
-    $usecase = new FetchArticlesInteractor($input);
-    $presenter = new HomePresenter($usecase->handle());
-    $homeViewModel = $presenter->view();
+    $usecase = new FindArticleInteractor($input);
+    $presenter = new MyArticleDetailPresenter($usecase->handle());
+    $myArticleViewModel = $presenter->view();
+    // 取得に失敗した場合は Not Found
+    if (!$myArticleViewModel['isSuccess']) {
+        $session->appendError($myArticleViewModel['message']);
+        Response::redirect('error.php', 404);
+    }
+    $article = $myArticleViewModel['article'];
 } catch (Exception $e) {
     $errors[] = $e->getMessage();
 }
@@ -43,14 +46,13 @@ try {
 <?php require_once './includes/header.php'; ?>
   <div class="container">
     <article class="article">
-      <h1 class="article__heading">blog一覧</h1>
-<?php foreach ($errors as $e): ?>
-      <div class="error"><?php echo $e; ?></div>
-<?php endforeach; ?>
+      <h1 class="article__heading"><?php echo $article['title']; ?></h1>
       <div class="article__body">
-        <div class="article__datetime">投稿日：あああああああああ</div>
+        <div class="article__datetime"><?php echo $article[
+            'createdAt'
+        ]; ?></div>
         <div class="article__contents">
-          ああああああああああああああ
+          <?php echo $article['contents']; ?>
         </div>
       </div>
     </article>

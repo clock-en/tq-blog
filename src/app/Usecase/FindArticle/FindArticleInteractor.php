@@ -4,7 +4,7 @@ namespace App\UseCase\FindArticle;
 use App\Adapter\QueryService\ArticleQueryService;
 use App\Domain\Entity\Article;
 
-final class FetchArticlesInteractor
+final class FindArticleInteractor
 {
     const NOT_FOUND_MESSAGE = '対象の記事は見つかりませんでした。';
     const COMPLETE_MESSAGE = '記事を取得しました。';
@@ -29,6 +29,10 @@ final class FetchArticlesInteractor
      */
     public function handle(): FindArticleOutput
     {
+        // idに指定がない場合はfalse判定
+        if (is_null($this->input->id())) {
+            return new FindArticleOutput(false, self::NOT_FOUND_MESSAGE);
+        }
         $article = $this->findArticle();
         if (!$this->existsArticle($article)) {
             return new FindArticleOutput(false, self::NOT_FOUND_MESSAGE);
@@ -43,7 +47,7 @@ final class FetchArticlesInteractor
      */
     private function findArticle()
     {
-        return $this->articleQueryService->findById($this->input->id);
+        return $this->articleQueryService->findById($this->input->id());
     }
 
     /**

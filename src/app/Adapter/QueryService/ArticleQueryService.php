@@ -58,7 +58,7 @@ final class ArticleQueryService
      * @param ArticleId $id
      * @return Article|null
      */
-    public function findById(ArticleId $id): ?array
+    public function findById(ArticleId $id): ?Article
     {
         $articleMapper = $this->articleDao->findById($id);
         return $this->existsPost($articleMapper)

@@ -20,11 +20,11 @@ final class FindArticleOutput
     public function __construct(
         bool $isSuccess,
         string $message,
-        ?array $article = null
+        ?Article $article = null
     ) {
         $this->isSuccess = $isSuccess;
         $this->message = $message;
-        $this->articles = $article;
+        $this->article = $article;
     }
 
     /**
