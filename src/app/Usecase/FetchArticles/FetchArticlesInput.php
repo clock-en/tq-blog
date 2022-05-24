@@ -6,25 +6,25 @@ use App\Domain\ValueObject\Article\ArticleKeyword;
 
 final class FetchArticlesInput
 {
-    /** @var Order */
-    private Order $order;
+    /** @var Order|null */
+    private ?Order $order;
     /** @var ArticleKeyword */
     private ArticleKeyword $keyword;
 
     /**
-     * @param Order
+     * @param Order|null
      * @param ArticleKeyword
      */
-    public function __construct(Order $order, ArticleKeyword $keyword)
+    public function __construct(?Order $order, ArticleKeyword $keyword)
     {
         $this->order = $order;
         $this->keyword = $keyword;
     }
 
     /**
-     * @return Order
+     * @return Order|null
      */
-    public function order(): Order
+    public function order(): ?Order
     {
         return $this->order;
     }

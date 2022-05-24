@@ -16,12 +16,11 @@ $user = $session->getUser();
 if (is_null($user)) {
     Response::redirect('./user/signin.php');
 }
-// 並び順に指定がない場合は降順を設定
-$order = filter_input(INPUT_GET, 'order') ?? 'desc';
+$order = filter_input(INPUT_GET, 'order') ?? null;
 $keyword = filter_input(INPUT_GET, 'keyword') ?? '';
 
 try {
-    $articleOrder = new Order($order);
+    $articleOrder = is_null($order) ? null : new Order($order);
     $articleKeyword = new ArticleKeyword($keyword);
     $input = new FetchArticlesInput($articleOrder, $articleKeyword);
 

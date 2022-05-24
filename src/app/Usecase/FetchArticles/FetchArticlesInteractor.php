@@ -3,6 +3,7 @@ namespace App\UseCase\FetchArticles;
 
 use App\Adapter\QueryService\ArticleQueryService;
 use App\Domain\Entity\Article;
+use App\Domain\ValueObject\Order;
 
 final class FetchArticlesInteractor
 {
@@ -43,13 +44,14 @@ final class FetchArticlesInteractor
      */
     private function fetchArticles()
     {
+        // 並び順に指定がない場合は降順を設定して取得を行う
         if ($this->input->keyword()->value() === '') {
             return $this->articleQueryService->fetchAllArticles(
-                $this->input->order()
+                $this->input->order() ?? new Order('desc')
             );
         }
         return $this->articleQueryService->searchArticlesByKeyword(
-            $this->input->order(),
+            $this->input->order() ?? new Order('desc'),
             $this->input->keyword()
         );
     }
