@@ -6,11 +6,14 @@ use App\Domain\Entity\Article;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleTitle;
 use App\Domain\ValueObject\Article\ArticleContents;
+use App\Domain\ValueObject\Article\ArticleKeyword;
 use App\Domain\ValueObject\User\UserId;
 use App\Domain\ValueObject\JaDateTime;
+use App\Domain\ValueObject\Order;
 
 final class ArticleQueryService
 {
+    /** @var ArticleSqlDao */
     private ArticleSqlDao $articleDao;
 
     public function __construct()
@@ -20,11 +23,31 @@ final class ArticleQueryService
 
     /**
      * 記事の一覧を取得する
+     * @param Order $order
      * @return ArrayObject<Article>|null
      */
-    public function fetchAllArticles(): ?array
+    public function fetchAllArticles(Order $order): ?array
     {
-        $articlesMapper = $this->articleDao->fetchAllArticles();
+        $articlesMapper = $this->articleDao->fetchAllArticles($order);
+        return $this->existsPost($articlesMapper)
+            ? $this->getArticleEntities($articlesMapper)
+            : null;
+    }
+
+    /**
+     * 記事検索
+     * @param Order $order
+     * @param ArticleKeyword $keyword
+     * @return ArrayObject<Article>|null
+     */
+    public function searchArticlesByKeyword(
+        Order $order,
+        ArticleKeyword $keyword
+    ): ?array {
+        $articlesMapper = $this->articleDao->searchArticlesByKeyword(
+            $order,
+            $keyword
+        );
         return $this->existsPost($articlesMapper)
             ? $this->getArticleEntities($articlesMapper)
             : null;

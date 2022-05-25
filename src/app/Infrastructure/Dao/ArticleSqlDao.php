@@ -3,6 +3,8 @@ namespace App\Infrastructure\Dao;
 
 use PDO;
 use App\Domain\ValueObject\Article\NewArticle;
+use App\Domain\ValueObject\Article\ArticleKeyword;
+use App\Domain\ValueObject\Order;
 
 final class ArticleSqlDao extends SqlDao
 {
@@ -31,12 +33,43 @@ final class ArticleSqlDao extends SqlDao
 
     /**
      * 記事の一覧取得
+     * @param Order $order
      * @return array|null
      */
-    public function fetchAllArticles(): ?array
+    public function fetchAllArticles(Order $order): ?array
     {
-        $sql = sprintf('SELECT * FROM %s', self::TABLE_NAME);
+        $sql = sprintf(
+            'SELECT * FROM %s ORDER BY created_at %s;',
+            self::TABLE_NAME,
+            $order->value()
+        );
         $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        $articles = $statement->fetchAll();
+        return $articles ? $articles : null;
+    }
+
+    /**
+     * 記事検索
+     * @param Order $order
+     * @param ArticleKeyword $keyword
+     * @return array|null
+     */
+    public function searchArticlesByKeyword(
+        Order $order,
+        ArticleKeyword $keyword
+    ): ?array {
+        $sql = sprintf(
+            'SELECT * FROM %s WHERE (title LIKE :keyword OR contents LIKE :keyword) ORDER BY created_at %s;',
+            self::TABLE_NAME,
+            $order->value()
+        );
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(
+            ':keyword',
+            '%' . $keyword->value() . '%',
+            PDO::PARAM_STR
+        );
         $statement->execute();
         $articles = $statement->fetchAll();
         return $articles ? $articles : null;
