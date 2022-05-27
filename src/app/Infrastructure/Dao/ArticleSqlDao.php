@@ -3,6 +3,7 @@ namespace App\Infrastructure\Dao;
 
 use PDO;
 use App\Domain\ValueObject\Article\NewArticle;
+use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleKeyword;
 use App\Domain\ValueObject\Order;
 
@@ -73,5 +74,20 @@ final class ArticleSqlDao extends SqlDao
         $statement->execute();
         $articles = $statement->fetchAll();
         return $articles ? $articles : null;
+    }
+
+    /**
+     * 記事取得 (ID)
+     * @param ArticleId $id
+     * @return array|null
+     */
+    public function findById(ArticleId $id)
+    {
+        $sql = sprintf('SELECT * FROM %s WHERE id=:id', self::TABLE_NAME);
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':id', $id->value(), PDO::PARAM_STR);
+        $statement->execute();
+        $article = $statement->fetch();
+        return $article ? $article : null;
     }
 }
