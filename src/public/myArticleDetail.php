@@ -51,8 +51,10 @@ try {
         <div class="article__datetime"><?php echo $article[
             'createdAt'
         ]; ?></div>
-        <div class="article__contents">
-          <?php echo $article['contents']; ?>
+        <div class="article__field">
+          <div class="article__field__value">
+            <?php echo $article['contents']; ?>
+          </div>
         </div>
       </div>
     </article>

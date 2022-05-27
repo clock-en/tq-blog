@@ -67,12 +67,25 @@ li {
   padding: 50px;
   text-align: left;
 }
+.article__body > *:first-child {
+  margin-top: 0;
+}
+.article__body > *:last-child {
+  margin-bottom: 0;
+}
 .article__datetime {
   font-size: 12px;
   font-weight: bold;
   margin-bottom: 1em;
 }
-.article__contents {
+.article__field {
+  margin-bottom: 20px;
+}
+.article__field__name {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+.article__field__value {
   border-radius: 5px;
   padding: 1em;
   background: lightgrey;
@@ -112,6 +125,15 @@ li {
 }
 .entry__datetime {
   margin-bottom: 10px;
+}
+
+.offstyle-input {
+  width: 100%;
+  display: block;
+  background: inherit;
+  border: none;
+  padding: 0;
+  outline: none;
 }
 
 /* トップページ */
