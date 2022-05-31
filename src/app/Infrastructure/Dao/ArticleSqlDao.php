@@ -5,6 +5,7 @@ use PDO;
 use App\Domain\ValueObject\Article\NewArticle;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleKeyword;
+use App\Domain\Entity\Article;
 use App\Domain\ValueObject\Order;
 use App\Domain\ValueObject\User\UserId;
 
@@ -28,6 +29,27 @@ final class ArticleSqlDao extends SqlDao
 
         $statement = $this->pdo->prepare($sql);
         $statement->bindParam(':userId', $userId->value(), PDO::PARAM_STR);
+        $statement->bindParam(':title', $title->value(), PDO::PARAM_STR);
+        $statement->bindParam(':contents', $contents->value(), PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    /**
+     * 記事修正
+     * @param Article $article
+     */
+    public function update(Article $article): void
+    {
+        $sql = sprintf(
+            'UPDATE %s SET title=:title, contents=:contents WHERE id=:id;',
+            self::TABLE_NAME
+        );
+        $id = $article->id();
+        $title = $article->title();
+        $contents = $article->contents();
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':id', $id->value(), PDO::PARAM_STR);
         $statement->bindParam(':title', $title->value(), PDO::PARAM_STR);
         $statement->bindParam(':contents', $contents->value(), PDO::PARAM_STR);
         $statement->execute();

@@ -61,11 +61,27 @@ final class Article
     }
 
     /**
+     * @param ArticleTitle
+     */
+    public function updateTitle(ArticleTitle $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
      * @return ArticleContents
      */
     public function contents(): ArticleContents
     {
         return $this->contents;
+    }
+
+    /**
+     * @param ArticleContents
+     */
+    public function updateContents(ArticleContents $contents): void
+    {
+        $this->contents = $contents;
     }
 
     /**
