@@ -63,9 +63,15 @@ final class Article
     /**
      * @param ArticleTitle
      */
-    public function updateTitle(ArticleTitle $title): void
+    public function updateTitle(ArticleTitle $title): Article
     {
-        $this->title = $title;
+        return new self(
+            $this->id,
+            $this->userId,
+            $title,
+            $this->contents,
+            $this->createdAt
+        );
     }
 
     /**
@@ -78,10 +84,17 @@ final class Article
 
     /**
      * @param ArticleContents
+     * @return self
      */
-    public function updateContents(ArticleContents $contents): void
+    public function updateContents(ArticleContents $contents): Article
     {
-        $this->contents = $contents;
+        return new self(
+            $this->id,
+            $this->userId,
+            $this->title,
+            $contents,
+            $this->createdAt
+        );
     }
 
     /**

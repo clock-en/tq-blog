@@ -48,8 +48,8 @@ final class UpdateArticleInteractor
         }
 
         // エンティティの内容を修正してUpdate
-        $article->updateTitle($this->input->title());
-        $article->updateContents($this->input->contents());
+        $article = $article->updateTitle($this->input->title());
+        $article = $article->updateContents($this->input->contents());
         $this->update($article);
         return new UpdateArticleOutput(true, self::COMPLETE_MESSAGE);
     }
