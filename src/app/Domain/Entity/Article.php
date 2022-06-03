@@ -61,21 +61,6 @@ final class Article
     }
 
     /**
-     * @param ArticleTitle
-     * @return Article
-     */
-    public function updateTitle(ArticleTitle $title): Article
-    {
-        return new self(
-            $this->id,
-            $this->userId,
-            $title,
-            $this->contents,
-            $this->createdAt
-        );
-    }
-
-    /**
      * @return ArticleContents
      */
     public function contents(): ArticleContents
@@ -84,25 +69,29 @@ final class Article
     }
 
     /**
-     * @param ArticleContents
-     * @return Article
-     */
-    public function updateContents(ArticleContents $contents): Article
-    {
-        return new self(
-            $this->id,
-            $this->userId,
-            $this->title,
-            $contents,
-            $this->createdAt
-        );
-    }
-
-    /**
      * @return JaDateTime
      */
     public function createdAt(): JaDateTime
     {
         return $this->createdAt;
+    }
+
+    /**
+     * 記事の内容を更新する
+     * @param ArticleTitle
+     * @param ArticleContents
+     * @return Article
+     */
+    public function update(
+        ArticleTitle $title,
+        ArticleContents $contents
+    ): Article {
+        return new self(
+            $this->id,
+            $this->userId,
+            $title,
+            $contents,
+            $this->createdAt
+        );
     }
 }
