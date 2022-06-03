@@ -62,6 +62,7 @@ final class Article
 
     /**
      * @param ArticleTitle
+     * @return Article
      */
     public function updateTitle(ArticleTitle $title): Article
     {
@@ -84,7 +85,7 @@ final class Article
 
     /**
      * @param ArticleContents
-     * @return self
+     * @return Article
      */
     public function updateContents(ArticleContents $contents): Article
     {
