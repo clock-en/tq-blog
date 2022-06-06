@@ -47,12 +47,23 @@ try {
   <div class="container">
     <article class="article">
       <h1 class="article__heading"><?php echo $article['title']; ?></h1>
+<?php foreach ($messages as $m): ?>
+      <div class="success"><?php echo $m; ?></div>
+<?php endforeach; ?>
       <div class="article__body">
         <div class="article__datetime"><?php echo $article[
             'createdAt'
         ]; ?></div>
-        <div class="article__contents">
-          <?php echo $article['contents']; ?>
+        <div class="article__field">
+          <div class="article__field__value">
+            <?php echo $article['contents']; ?>
+          </div>
+        </div>
+        <div class="article__actions">
+          <a class="button" href="/edit.php?id=<?php echo $article[
+              'id'
+          ]; ?>">編集</a>
+          <a class="button" href="/mypage.php">マイページへ</a>
         </div>
       </div>
     </article>

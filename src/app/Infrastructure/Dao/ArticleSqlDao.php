@@ -5,7 +5,9 @@ use PDO;
 use App\Domain\ValueObject\Article\NewArticle;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleKeyword;
+use App\Domain\Entity\Article;
 use App\Domain\ValueObject\Order;
+use App\Domain\ValueObject\User\UserId;
 
 final class ArticleSqlDao extends SqlDao
 {
@@ -33,6 +35,27 @@ final class ArticleSqlDao extends SqlDao
     }
 
     /**
+     * 記事修正
+     * @param Article $article
+     */
+    public function update(Article $article): void
+    {
+        $sql = sprintf(
+            'UPDATE %s SET title=:title, contents=:contents WHERE id=:id;',
+            self::TABLE_NAME
+        );
+        $id = $article->id();
+        $title = $article->title();
+        $contents = $article->contents();
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':id', $id->value(), PDO::PARAM_STR);
+        $statement->bindParam(':title', $title->value(), PDO::PARAM_STR);
+        $statement->bindParam(':contents', $contents->value(), PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    /**
      * 記事の一覧取得
      * @param Order $order
      * @return array|null
@@ -45,6 +68,24 @@ final class ArticleSqlDao extends SqlDao
             $order->value()
         );
         $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        $articles = $statement->fetchAll();
+        return $articles ? $articles : null;
+    }
+
+    /**
+     * 記事の一覧取得
+     * @param UserId $userId
+     * @return array|null
+     */
+    public function fetchArticlesByUserId(UserId $userId): ?array
+    {
+        $sql = sprintf(
+            'SELECT * FROM %s WHERE user_id=:userId ORDER BY created_at desc;',
+            self::TABLE_NAME
+        );
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':userId', $userId->value(), PDO::PARAM_STR);
         $statement->execute();
         $articles = $statement->fetchAll();
         return $articles ? $articles : null;

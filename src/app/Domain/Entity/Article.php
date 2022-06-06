@@ -75,4 +75,23 @@ final class Article
     {
         return $this->createdAt;
     }
+
+    /**
+     * 記事の内容を更新する
+     * @param ArticleTitle
+     * @param ArticleContents
+     * @return Article
+     */
+    public function update(
+        ArticleTitle $title,
+        ArticleContents $contents
+    ): Article {
+        return new self(
+            $this->id,
+            $this->userId,
+            $title,
+            $contents,
+            $this->createdAt
+        );
+    }
 }

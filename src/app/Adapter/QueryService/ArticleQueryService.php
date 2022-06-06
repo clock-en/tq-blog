@@ -35,6 +35,19 @@ final class ArticleQueryService
     }
 
     /**
+     * ユーザーID別に記事一覧を取得する
+     * @param UserId $userId
+     * @return ArrayObject<Article>|null
+     */
+    public function fetchArticlesByUserId(UserId $userId): ?array
+    {
+        $articlesMapper = $this->articleDao->fetchArticlesByUserId($userId);
+        return $this->existsPost($articlesMapper)
+            ? $this->getArticleEntities($articlesMapper)
+            : null;
+    }
+
+    /**
      * 記事検索
      * @param Order $order
      * @param ArticleKeyword $keyword

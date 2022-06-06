@@ -42,10 +42,10 @@ final class FindArticleInteractor
     }
 
     /**
-     * 記事一覧の取得
+     * 記事の取得
      * @return Article|null
      */
-    private function findArticle()
+    private function findArticle(): ?Article
     {
         return $this->articleQueryService->findById($this->input->id());
     }
