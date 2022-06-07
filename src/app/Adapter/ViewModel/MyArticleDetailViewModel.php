@@ -34,8 +34,8 @@ final class MyArticleDetailViewModel
 
     /**
      * view用のArticleを生成
-     * @param ArrayObject<Article>|null
-     * @return {id, int, title: string, contents: string }|null
+     * @param Article|null
+     * @return {id: int, title: string, contents: string, createdAt: string }|null
      */
     private function createArticleForWebView($article): ?array
     {
