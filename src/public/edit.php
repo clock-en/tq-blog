@@ -69,9 +69,7 @@ try {
             </div>
           </div>
           <div class="article__actions">
-            <button class="button" href="/edit.php?id=<?php echo $article[
-                'id'
-            ]; ?>">編集</button>
+            <button class="button">編集</button>
           </div>
         </div>
       </form>
