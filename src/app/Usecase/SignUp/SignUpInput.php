@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\SignUp;
+namespace App\Usecase\SignUp;
 
 use App\Domain\ValueObject\User\UserName;
 use App\Domain\ValueObject\Email;

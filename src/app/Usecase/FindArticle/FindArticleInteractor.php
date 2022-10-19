@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\FindArticle;
+namespace App\Usecase\FindArticle;
 
 use App\Adapter\QueryService\ArticleQueryService;
 use App\Domain\Entity\Article;

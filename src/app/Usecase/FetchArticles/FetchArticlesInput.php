@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\FetchArticles;
+namespace App\Usecase\FetchArticles;
 
 use App\Domain\ValueObject\Order;
 use App\Domain\ValueObject\Article\ArticleKeyword;

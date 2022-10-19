@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\UpdateArticle;
+namespace App\Usecase\UpdateArticle;
 
 use App\Adapter\Repository\ArticleRepository;
 use App\Adapter\QueryService\ArticleQueryService;

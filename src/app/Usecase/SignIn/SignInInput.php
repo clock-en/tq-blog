@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\SignIn;
+namespace App\Usecase\SignIn;
 
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\InputPassword;

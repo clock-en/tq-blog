@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\MypageViewModel;
-use App\UseCase\FetchUserArticles\FetchUserArticlesOutput;
+use App\Usecase\FetchUserArticles\FetchUserArticlesOutput;
 
 final class MypagePresenter
 {

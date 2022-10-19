@@ -2,8 +2,8 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\DetailViewModel;
-use App\UseCase\FindArticle\FindArticleOutput;
-use App\UseCase\FetchArticleComments\FetchArticleCommentsOutput;
+use App\Usecase\FindArticle\FindArticleOutput;
+use App\Usecase\FetchArticleComments\FetchArticleCommentsOutput;
 
 final class DetailPresenter
 {

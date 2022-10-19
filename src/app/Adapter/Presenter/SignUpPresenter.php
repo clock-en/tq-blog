@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\SignUpViewModel;
-use App\UseCase\SignUp\SignUpOutput;
+use App\Usecase\SignUp\SignUpOutput;
 
 final class SignUpPresenter
 {

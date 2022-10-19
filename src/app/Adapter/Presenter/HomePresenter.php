@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\HomeViewModel;
-use App\UseCase\FetchArticles\FetchArticlesOutput;
+use App\Usecase\FetchArticles\FetchArticlesOutput;
 
 final class HomePresenter
 {

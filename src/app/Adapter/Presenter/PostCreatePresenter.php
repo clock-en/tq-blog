@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\PostCreateViewModel;
-use App\UseCase\CreateArticle\CreateArticleOutput;
+use App\Usecase\CreateArticle\CreateArticleOutput;
 
 final class PostCreatePresenter
 {

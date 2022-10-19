@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\UpdateArticle;
+namespace App\Usecase\UpdateArticle;
 
 final class UpdateArticleOutput
 {

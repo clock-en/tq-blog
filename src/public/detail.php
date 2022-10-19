@@ -2,10 +2,10 @@
 require_once '../vendor/autoload.php';
 
 use App\Adapter\Presenter\DetailPresenter;
-use App\UseCase\FindArticle\FindArticleInput;
-use App\UseCase\FindArticle\FindArticleInteractor;
-use App\UseCase\FetchArticleComments\FetchArticleCommentsInput;
-use App\UseCase\FetchArticleComments\FetchArticleCommentsInteractor;
+use App\Usecase\FindArticle\FindArticleInput;
+use App\Usecase\FindArticle\FindArticleInteractor;
+use App\Usecase\FetchArticleComments\FetchArticleCommentsInput;
+use App\Usecase\FetchArticleComments\FetchArticleCommentsInteractor;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Utils\Response;
 use App\Utils\Session;

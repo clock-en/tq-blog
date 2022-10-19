@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\MyArticleDetailViewModel;
-use App\UseCase\FindArticle\FindArticleOutput;
+use App\Usecase\FindArticle\FindArticleOutput;
 
 final class MyArticleDetailPresenter
 {

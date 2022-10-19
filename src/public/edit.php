@@ -2,8 +2,8 @@
 require_once '../vendor/autoload.php';
 
 use App\Adapter\Presenter\MyArticleDetailPresenter;
-use App\UseCase\FindArticle\FindArticleInput;
-use App\UseCase\FindArticle\FindArticleInteractor;
+use App\Usecase\FindArticle\FindArticleInput;
+use App\Usecase\FindArticle\FindArticleInteractor;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Utils\Response;
 use App\Utils\Session;

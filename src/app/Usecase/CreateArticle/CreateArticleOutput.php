@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\CreateArticle;
+namespace App\Usecase\CreateArticle;
 
 final class CreateArticleOutput
 {

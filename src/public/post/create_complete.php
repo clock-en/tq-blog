@@ -2,8 +2,8 @@
 require_once '../../vendor/autoload.php';
 
 use App\Adapter\Presenter\PostCreatePresenter;
-use App\UseCase\CreateArticle\CreateArticleInput;
-use App\UseCase\CreateArticle\CreateArticleInteractor;
+use App\Usecase\CreateArticle\CreateArticleInput;
+use App\Usecase\CreateArticle\CreateArticleInteractor;
 use App\Domain\ValueObject\Article\ArticleTitle;
 use App\Domain\ValueObject\Article\ArticleContents;
 use App\Utils\Session;
