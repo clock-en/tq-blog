@@ -1,7 +1,7 @@
 <?php
 namespace App\Adapter\ViewModel;
 
-use App\UseCase\CreateArticle\CreateArticleOutput;
+use App\Usecase\CreateArticle\CreateArticleOutput;
 
 final class PostCreateViewModel
 {

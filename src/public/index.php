@@ -2,8 +2,8 @@
 require_once '../vendor/autoload.php';
 
 use App\Adapter\Presenter\HomePresenter;
-use App\UseCase\FetchArticles\FetchArticlesInput;
-use App\UseCase\FetchArticles\FetchArticlesInteractor;
+use App\Usecase\FetchArticles\FetchArticlesInput;
+use App\Usecase\FetchArticles\FetchArticlesInteractor;
 use App\Domain\ValueObject\Order;
 use App\Domain\ValueObject\Article\ArticleKeyword;
 use App\Utils\Response;

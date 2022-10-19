@@ -3,8 +3,8 @@ namespace App\Adapter\ViewModel;
 
 use App\Domain\Entity\Article;
 use App\Domain\Entity\Comment;
-use App\UseCase\FindArticle\FindArticleOutput;
-use App\UseCase\FetchArticleComments\FetchArticleCommentsOutput;
+use App\Usecase\FindArticle\FindArticleOutput;
+use App\Usecase\FetchArticleComments\FetchArticleCommentsOutput;
 
 final class DetailViewModel
 {

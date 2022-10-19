@@ -1,7 +1,7 @@
 <?php
 namespace App\Adapter\ViewModel;
 
-use App\UseCase\SignUp\SignUpOutput;
+use App\Usecase\SignUp\SignUpOutput;
 
 final class SignUpViewModel
 {

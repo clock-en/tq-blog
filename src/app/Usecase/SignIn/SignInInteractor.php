@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\SignIn;
+namespace App\Usecase\SignIn;
 
 use App\Adapter\QueryService\UserQueryService;
 use App\Domain\Entity\User;

@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\CreateArticle;
+namespace App\Usecase\CreateArticle;
 
 use App\Domain\ValueObject\Article\ArticleTitle;
 use App\Domain\ValueObject\Article\ArticleContents;

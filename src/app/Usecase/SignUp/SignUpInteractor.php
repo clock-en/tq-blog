@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\SignUp;
+namespace App\Usecase\SignUp;
 
 use App\Adapter\QueryService\UserQueryService;
 use App\Adapter\Repository\UserRepository;

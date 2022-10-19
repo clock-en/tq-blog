@@ -2,7 +2,7 @@
 namespace App\Adapter\Presenter;
 
 use App\Adapter\ViewModel\EditViewModel;
-use App\UseCase\UpdateArticle\UpdateArticleOutput;
+use App\Usecase\UpdateArticle\UpdateArticleOutput;
 
 final class EditPresenter
 {

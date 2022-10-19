@@ -1,7 +1,7 @@
 <?php
 namespace App\Adapter\ViewModel;
 
-use App\UseCase\UpdateArticle\UpdateArticleOutput;
+use App\Usecase\UpdateArticle\UpdateArticleOutput;
 
 final class EditViewModel
 {

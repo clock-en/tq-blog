@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\CreateArticle;
+namespace App\Usecase\CreateArticle;
 
 use App\Adapter\Repository\ArticleRepository;
 use App\Domain\ValueObject\Article\NewArticle;

@@ -2,7 +2,7 @@
 namespace App\Adapter\ViewModel;
 
 use App\Domain\Entity\Article;
-use App\UseCase\FindArticle\FindArticleOutput;
+use App\Usecase\FindArticle\FindArticleOutput;
 
 final class MyArticleDetailViewModel
 {

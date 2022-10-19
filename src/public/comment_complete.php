@@ -2,8 +2,8 @@
 require_once '../vendor/autoload.php';
 
 use App\Adapter\Presenter\EditPresenter;
-use App\UseCase\UpdateArticle\UpdateArticleInput;
-use App\UseCase\UpdateArticle\UpdateArticleInteractor;
+use App\Usecase\UpdateArticle\UpdateArticleInput;
+use App\Usecase\UpdateArticle\UpdateArticleInteractor;
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleTitle;
 use App\Domain\ValueObject\Article\ArticleContents;

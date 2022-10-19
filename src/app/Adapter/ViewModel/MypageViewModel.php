@@ -2,7 +2,7 @@
 namespace App\Adapter\ViewModel;
 
 use App\Domain\Entity\Article;
-use App\UseCase\FetchUserArticles\FetchUserArticlesOutput;
+use App\Usecase\FetchUserArticles\FetchUserArticlesOutput;
 
 final class MypageViewModel
 {

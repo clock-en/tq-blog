@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\UpdateArticle;
+namespace App\Usecase\UpdateArticle;
 
 use App\Domain\ValueObject\Article\ArticleId;
 use App\Domain\ValueObject\Article\ArticleTitle;

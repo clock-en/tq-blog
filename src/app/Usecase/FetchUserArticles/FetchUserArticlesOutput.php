@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\FetchUserArticles;
+namespace App\Usecase\FetchUserArticles;
 
 use App\Domain\Entity\Article;
 

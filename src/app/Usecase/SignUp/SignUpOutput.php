@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\SignUp;
+namespace App\Usecase\SignUp;
 
 final class SignUpOutput
 {

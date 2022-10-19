@@ -1,5 +1,5 @@
 <?php
-namespace App\UseCase\FetchArticleComments;
+namespace App\Usecase\FetchArticleComments;
 
 use App\Domain\Entity\Comment;
 

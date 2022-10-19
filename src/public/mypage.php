@@ -2,8 +2,8 @@
 require_once '../vendor/autoload.php';
 
 use App\Adapter\Presenter\MypagePresenter;
-use App\UseCase\FetchUserArticles\FetchUserArticlesInput;
-use App\UseCase\FetchUserArticles\FetchUserArticlesInteractor;
+use App\Usecase\FetchUserArticles\FetchUserArticlesInput;
+use App\Usecase\FetchUserArticles\FetchUserArticlesInteractor;
 use App\Domain\ValueObject\User\UserId;
 use App\Utils\Response;
 use App\Utils\Session;
