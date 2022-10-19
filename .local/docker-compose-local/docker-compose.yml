@@ -18,6 +18,11 @@ services:
 
   php:
     build: $PWD/docker-images/php
+    environment:
+      - DB_NAME=blog
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_HOST=mysql
     volumes:
       - $PWD/src:/var/www/html
     networks:
