@@ -13,3 +13,5 @@ WORKDIR /var/www
 
 RUN cd /var/www && rm -rf ./html \
 	&& composer --ignore-platform-reqs install
+
+ENV PORT 80
