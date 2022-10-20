@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 
-COPY docker-images/prod/php.ini /usr/local/etc/php/
-COPY docker-images/prod/000-default.conf /etc/apache2/sites-enabled/
+COPY ./.prod/php.ini /usr/local/etc/php/
+COPY ./.prod/000-default.conf /etc/apache2/sites-enabled/
 
 RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer \
 	&& apt-get update \ 
