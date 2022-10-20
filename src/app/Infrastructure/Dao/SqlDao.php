@@ -14,8 +14,16 @@ abstract class SqlDao
     public function __construct()
     {
         try {
+            $dbUrl = "mysql:dbname={$_ENV['DB_NAME']};";
+
+            if ($_ENV['APP_ENV'] == 'prod') {
+                $dbUrl = $dbUrl . "unix_socket={$_ENV['DB_SOCKET_PATH']};";
+            } else {
+                $dbUrl = $dbUrl . "host={$_ENV['DB_HOST']};";
+            }
+
             $this->pdo = new PDO(
-                "mysql:dbname={$_ENV['DB_NAME']};host={$_ENV['DB_HOST']};",
+                $dbUrl,
                 $_ENV['DB_USER'],
                 $_ENV['DB_PASSWORD']
             );
